@@ -1,0 +1,107 @@
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.ui.huge.centered.header {
+  font-size: 4em;
+}
+
+.ui.grid {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0 !important;
+}
+
+.column {
+  margin: 0 0 0 0;
+}
+
+input[type="text"] {
+  /*text-align: center !important*/
+}
+
+.ui.three.column.grid {
+  text-align: center;
+}
+
+.card {
+  cursor: pointer;
+}
+
+.card.selected {
+  background-color: #002e5d !important;
+}
+
+.card.selected > .content > *,
+.card.selected:hover > .content > *,
+.card:hover > .content > *{
+  color: white !important;
+}
+
+.card:hover, .card.selected:hover {
+  background-color: #21ba45 !important;
+}
+
+/** Slider **/
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: transparent; /* Otherwise white in Chrome */
+}
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+  height: 1.5em;
+  width: 1.5em;
+  background: #FFFFFF -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.5)));
+  background: #FFFFFF -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+  background: #FFFFFF linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+  border-radius: 100%;
+  -webkit-box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15), 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
+  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, 0.15), 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
+  -webkit-transition: background 0.3s ease;
+  transition: background 0.3s ease;
+  margin-top: -7px;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.05);
+  height: 0.4em;
+  border-color: white;
+}
+
+.flatpickr-input {
+  display: none;
+}
