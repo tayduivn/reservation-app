@@ -1,3 +1,5 @@
+Vue.config.devtools = true
+
 Vue.component('flatpickr', VueFlatpickr)
 Vue.use(SemanticUIVue)
 
@@ -88,7 +90,7 @@ var app = new Vue({
       let seats    = this.totalAttendance
 
       axios
-        .get(`https://astral.ctcd.org/api/public/findAvailableEvents?date=${date}&seats=${seats}`)
+        .get(`${SERVER}/api/public/findAvailableEvents?date=${date}&seats=${seats}`)
         .then(response => this.events          = response.data.data )
         .catch(error   => this.fetchFailed     = true )
         .finally(()    => this.isLoadingEvents = false )
@@ -96,14 +98,14 @@ var app = new Vue({
     // Getting list of shows from the server
     queryShows() {
       axios
-        .get(`https://astral.ctcd.org/api/public/shows`)
+        .get(`${SERVER}/api/public/shows`)
         .then(response => this.shows = response.data.data)
         .catch(error => this.fetchFailed = true)
     },
     // Getting list of schools from the server
     queryOrganizations() {
       axios
-        .get(`https://astral.ctcd.org/api/public/organizations`)
+        .get(`${SERVER}/api/public/organizations`)
         .then(response => this.organizations = response.data.data)
         .catch(error => this.fetchFailed = true)
     },
@@ -150,7 +152,7 @@ var app = new Vue({
       // Send it to the server
       /*$.ajax({
         method : "POST",
-        url    : "https://astral.ctcd.org/api/public/createReservation",
+        url    : "${SERVER}/api/public/createReservation",
         data   : request,
         success: function(response) { alert(response.message.content); this.isSuccess = true },
         error  : function() { alert("Failed to send reservation. Please try again in a few minutes.")}
@@ -159,9 +161,9 @@ var app = new Vue({
           method: "POST",
           data: request,
           headers: {"content-type" : "application/json"},
-          url: "https://astral.ctcd.org/api/public/createReservation",
+          url: `${SERVER}/api/public/createReservation`,
         })
-        //.post("https://astral.ctcd.org/api/public/createReservation", request)
+        //.post("${SERVER}/api/public/createReservation", request)
         .then(response => this.isSuccess = true)
         .catch(error => { alert("Unable to send reservation at this moment. Please try again in a few minutes.") })
     },
@@ -255,43 +257,21 @@ var app = new Vue({
       let show = this.shows.filter(show => show.id == 1)
       return show
     },
-    isTeacherValid() {  
-      if (
-        (!this.teacher.firstname) ||
-        (!this.teacher.lastname)  ||
-        (!this.teacher.email)     ||
-        (!this.teacher.phone[0])  ||
-        (!this.teacher.phone[1])  ||
-        (!this.teacher.phone[2])
-      )
-        return false
-      else
-        return true
-    },
-    isSchoolValid() {
-      if (this.school.id == 0)
-      {
-        if (
-          (!this.school.name)     ||
-          (!this.school.address)  ||
-          (!this.school.city)     ||
-          (!this.school.zip)      ||
-          (!this.school.phone[0]) ||
-          (!this.school.phone[1]) ||
-          (!this.school.phone[2])
-        )
-         return false
-        else 
-          return true
-      } 
-      else 
-      return true
-      
-    },
     isFormValid() {
       if (
-          (!this.isSchoolValid)       ||
-          (!this.isTeacherValid)      ||
+          (!this.teacher.firstname)   ||
+          (!this.teacher.lastname)    ||
+          (!this.teacher.email)       ||
+          (!this.teacher.phone[0])    ||
+          (!this.teacher.phone[1])    ||
+          (!this.teacher.phone[2])    ||
+          //(!this.school.name)       ||
+          //(!this.school.address)    ||
+          //(!this.school.city)       ||
+          //(!this.school.zip)        ||
+          //(!this.school.phone[0])   ||
+          //(!this.school.phone[1])   ||
+          //(!this.school.phone[2])   ||
           (!this.school.specialNeeds) ||
           (!this.school.taxable)
         )

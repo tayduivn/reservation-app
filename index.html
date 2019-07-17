@@ -45,9 +45,7 @@
               </div>
               <div class="ui huge centered header">{{ attendance.students }}</div>
               <input type="range" min="0" max="180" v-model="attendance.students">
-              <sui-label pointing basic>
-                Slide left or right to change numbers
-              </sui-label>
+              <div class="ui pointing basic label">Slide left or right to change numbers</div>
             </div>
           </div>
           <div class="column">
@@ -62,9 +60,7 @@
               </div>
               <div class="ui huge centered header">{{ attendance.teachers }}</div>
               <input type="range" min="0" max="30" v-model="attendance.teachers">
-              <sui-label pointing basic>
-                Slide left or right to change numbers
-              </sui-label>
+              <div class="ui pointing basic label">Slide left or right to change numbers</div>
             </div>
           </div>
           <div class="column">
@@ -79,9 +75,7 @@
               </div>
               <div class="ui huge centered header">{{ attendance.parents }}</div>
               <input type="range" min="0" max="60" v-model="attendance.parents">
-              <sui-label pointing basic>
-                Slide left or right to change numbers
-              </sui-label>
+              <div class="ui pointing basic label">Slide left or right to change numbers</div>
             </div>
           </div>
         </div>
@@ -158,7 +152,7 @@
                     One Show
                   </div>
                   <div class="center aligned description">
-                    1 Full Dome or Laser Light +
+                    2 Full Dome or Laser Light (or 1 of each) +
                     1 Startalk or Uniview +
                     1 SpacePark360 Virtual Roller Coaster (time permitting)
                   </div>
@@ -495,7 +489,7 @@
                 <div class="ui dividing header">
                   School Information
                   <div class="sub header">
-                    Great job so far{{ (teacher.firstname == null) || (teacher.firstname == "") ? "" : ", " + teacher.firstname }}!
+                    Great job so far{{ teacher.firstname == null ? "" : ", " + teacher.firstname }}!
                     Please enter your school's info.
                   </div>
                 </div>
@@ -503,6 +497,7 @@
                   <label for="school.name">School</label>
                   <sui-dropdown search selection fluid
                                 placeholder="Select or start typing the name of your school. Do not abbreviate."
+                                noResultsMessage="School not found. Clear your search and select the last option, 'My school is not on this list'."
                                 :options="filteredOrganizations"
                                 v-model="school.id">
                   </sui-dropdown>
@@ -613,16 +608,8 @@
                 </div>
                 <div class="field">
                   <label for="memo"></label>
-                  <textarea 
-                    name="memo" 
-                    v-model="memo" 
-                    v-if="school.specialNeeds == true" 
-                    placeholder="Explain special needs or enter any special requests or comments about your reservation."></textarea>
-                  <textarea 
-                    name="memo" 
-                    v-model="memo" 
-                    v-else 
-                    placeholder="Enter any special requests or comments about your reservation."></textarea>
+                  <textarea name="memo" v-model="memo" v-if="school.specialNeeds == true" placeholder="Explain special needs or enter any special requests or comments about your reservation."></textarea>
+                  <textarea name="memo" v-model="memo" v-else placeholder="Enter any special requests or comments about your reservation."></textarea>
                 </div>
                 <transition name="fade" mode="out-in">
                   <div class="field" v-if="!isFormValid">
@@ -634,42 +621,14 @@
                         </div>
                         <p>Please fix the following:</p>
                         <ul>
-                          <li v-if="!teacher.firstname">
-                            We need your first name
-                          </li>
-                          <li v-if="!teacher.lastname">
-                            We need your last name
-                          </li>
-                          <li v-if="!teacher.email">
-                            We need your email
-                          </li>
-                          <li v-if="!teacher.phone[0] || !teacher.phone[1] || !teacher.phone[2]">
-                            We need a phone number 
-                          </li>
-                          <li v-if="!isSchoolValid && !school.name">
-                            Please enter the name of the school, do not abbreviate
-                          </li>
-                          <li v-if="!isSchoolValid && !school.address">
-                              Please enter the address of the school
-                          </li>
-                          <li v-if="!isSchoolValid && !school.city">
-                              Please enter the city of the school
-                          </li>
-                          <li v-if="!isSchoolValid && !school.zip">
-                              Please enter the ZIP of the school
-                          </li>
-                          <li v-if="!isSchoolValid && (!school.phone[0] || !school.phone[1] || !school.phone[2])">
-                              Please enter the phone number of the school
-                          </li>
-                          <li v-if="!this.school.specialNeeds">
-                            Let us know if your group as kids with special needs
-                          </li>
-                          <li v-if="!school.taxable">
-                            Let us know if your school has a tax exempt form
-                          </li>
-                          <li v-if="this.school.id != 0">
-                            If your school is not on the list of schools, please select the option "My school is not on this list"
-                          </li>
+                          <li v-if="!school.id && !school.name">Your school is not in our database. Select "My school is not on this list", the very last option.</li>
+                          <li v-if="!teacher.firstname">We need your first name</li>
+                          <li v-if="!teacher.lastname">We need your last name</li>
+                          <li v-if="!teacher.email">We need your email</li>
+                          <li v-if="!teacher.phone[0] || !teacher.phone[1] || teacher.phone[2]">We need a phone number</li>
+                          <li v-if="!this.school.specialNeeds">Let us know if your group as kids with special needs</li>
+                          <li v-if="!school.taxable">Let us know if your school has a tax exempt form</li>
+                          <li>If your school is not on the list of schools, please select the option "My school is not on this list"</li>
                         </ul>
                       </div>
                     </div>
@@ -693,7 +652,7 @@
       </div>
     </transition>
     <transition name="fade" mode="out-in">
-      <div v-if="isSuccess">
+      <div class="ui container" v-if="isSuccess">
         <div class="ui success icon message">
           <i class="thumbs up icon"></i>
           <div class="content">
@@ -714,6 +673,9 @@
       </div>
     </transition>
   </div>
+  <script>
+    const SERVER = "http://0.0.0.0:8000"
+  </script>
   <script src="app.js"></script>
 </body>
 </html>
