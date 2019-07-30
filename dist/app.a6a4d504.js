@@ -8905,6 +8905,20 @@ exports.default = void 0;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   data: function data() {
     return {
@@ -8963,7 +8977,8 @@ var _default = {
         title: 'Teacher Info',
         description: 'We need your info'
       }],
-      transition: 'slide-right'
+      transition: 'slide-right',
+      hasAlert: false
     };
   },
   watch: {
@@ -8985,34 +9000,92 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "ui fluid container" }, [
-    _c("div", { staticClass: "ui grid" }, [
-      _c(
-        "div",
-        { staticClass: "four wide column" },
-        [
-          _c("sui-step-group", {
-            attrs: { size: "small", vertical: "", steps: _vm.steps }
-          })
-        ],
-        1
-      ),
+  return _c(
+    "div",
+    { staticClass: "ui fluid container" },
+    [
+      _c("div", { staticClass: "ui grid" }, [
+        _c(
+          "div",
+          { staticClass: "four wide column" },
+          [
+            _c("sui-step-group", {
+              attrs: { size: "small", vertical: "", steps: _vm.steps }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "twelve wide column" },
+          [
+            _c(
+              "transition",
+              { attrs: { name: _vm.transition, mode: "out-in" } },
+              [_c("router-view")],
+              1
+            )
+          ],
+          1
+        )
+      ]),
       _vm._v(" "),
       _c(
-        "div",
-        { staticClass: "twelve wide column" },
+        "sui-modal",
+        {
+          model: {
+            value: _vm.hasAlert,
+            callback: function($$v) {
+              _vm.hasAlert = $$v
+            },
+            expression: "hasAlert"
+          }
+        },
         [
+          _c("sui-modal-header", [_vm._v("Oops!")]),
+          _vm._v(" "),
           _c(
-            "transition",
-            { attrs: { name: _vm.transition, mode: "out-in" } },
-            [_c("router-view")],
+            "sui-modal-content",
+            [
+              _vm._v("\n      This is an alert!\n      "),
+              _c(
+                "sui-modal-description",
+                [
+                  _c("sui-header", [_vm._v("Title")]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("Something went wrong.")])
+                ],
+                1
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "sui-modal-actions",
+            [
+              _c(
+                "sui-button",
+                {
+                  attrs: { positive: "" },
+                  nativeOn: {
+                    click: function($event) {
+                      _vm.hasAlert = !_vm.hasAlert
+                    }
+                  }
+                },
+                [_vm._v("\n        OK\n      ")]
+              )
+            ],
             1
           )
         ],
         1
       )
-    ])
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -9021,7 +9094,7 @@ render._withStripped = true
             render: render,
             staticRenderFns: staticRenderFns,
             _compiled: true,
-            _scopeId: null,
+            _scopeId: "data-v-cc123d",
             functional: undefined
           };
         })());
@@ -28298,7 +28371,90 @@ render._withStripped = true
       }
     })();
 },{"vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/Attendance.vue":[function(require,module,exports) {
+"use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  data: function data() {
+    return {
+      attendance: {
+        students: 0,
+        teachers: 0,
+        parents: 0
+      }
+    };
+  }
+};
+exports.default = _default;
         var $fb0a22 = exports.default || module.exports;
       
       if (typeof $fb0a22 === 'function') {
@@ -28314,6 +28470,122 @@ render._withStripped = true
   return _c("div", { staticClass: "ui basic center aligned segment" }, [
     _c("h1", [_vm._v("Attendance")]),
     _vm._v(" "),
+    _c("div", { staticClass: "ui three column grid" }, [
+      _c("div", { staticClass: "column" }, [
+        _c("div", { staticClass: "ui segment" }, [
+          _c("img", {
+            staticClass: "ui centered small image",
+            attrs: { src: "/student.d0208aef.svg" }
+          }),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "ui huge centered header" }, [
+            _vm._v(_vm._s(_vm.attendance.students))
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.attendance.students,
+                expression: "attendance.students"
+              }
+            ],
+            attrs: { type: "range", min: "0", max: "180" },
+            domProps: { value: _vm.attendance.students },
+            on: {
+              __r: function($event) {
+                return _vm.$set(_vm.attendance, "students", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "ui pointing basic label" }, [
+            _vm._v("Slide left or right to change numbers")
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "column" }, [
+        _c("div", { staticClass: "ui segment" }, [
+          _c("img", {
+            staticClass: "ui centered small image",
+            attrs: { src: "/teacher.8ac98fbe.svg" }
+          }),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "ui huge centered header" }, [
+            _vm._v(_vm._s(_vm.attendance.teachers))
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.attendance.teachers,
+                expression: "attendance.teachers"
+              }
+            ],
+            attrs: { type: "range", min: "0", max: "30" },
+            domProps: { value: _vm.attendance.teachers },
+            on: {
+              __r: function($event) {
+                return _vm.$set(_vm.attendance, "teachers", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "ui pointing basic label" }, [
+            _vm._v("Slide left or right to change numbers")
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "column" }, [
+        _c("div", { staticClass: "ui segment" }, [
+          _c("img", {
+            staticClass: "ui centered small image",
+            attrs: { src: "/parent.49d6fc2c.svg", alt: "" }
+          }),
+          _vm._v(" "),
+          _vm._m(2),
+          _vm._v(" "),
+          _c("div", { staticClass: "ui huge centered header" }, [
+            _vm._v(_vm._s(_vm.attendance.parents))
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.attendance.parents,
+                expression: "attendance.parents"
+              }
+            ],
+            attrs: { type: "range", min: "0", max: "60" },
+            domProps: { value: _vm.attendance.parents },
+            on: {
+              __r: function($event) {
+                return _vm.$set(_vm.attendance, "parents", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "ui pointing basic label" }, [
+            _vm._v("Slide left or right to change numbers")
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("br"),
+    _c("br"),
+    _vm._v(" "),
     _c(
       "div",
       {
@@ -28327,12 +28599,55 @@ render._withStripped = true
       [_c("i", { staticClass: "left chevron icon" }), _vm._v("\n    Back\n  ")]
     ),
     _vm._v(" "),
-    _vm._m(0),
+    _vm._m(3),
     _vm._v(" "),
-    _vm._m(1)
+    _vm._m(4)
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ui header" }, [
+      _vm._v("\n          How many students?\n          "),
+      _c("div", { staticClass: "sub header" }, [
+        _vm._v("\n            We require a "),
+        _c("strong", [_vm._v("minimum of paying 20 tickets")]),
+        _vm._v(" to book a field trip.\n          ")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ui header" }, [
+      _vm._v("\n          How many teachers?\n          "),
+      _c("div", { staticClass: "sub header" }, [
+        _vm._v(
+          "\n            Chaperones and bus drivers also go here. For every 10 students, one teacher is free.\n          "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ui header" }, [
+      _vm._v("\n          How many parents?\n          "),
+      _c("div", { staticClass: "sub header" }, [
+        _vm._v(
+          "\n            Include parents in the count below\n            "
+        ),
+        _c("strong", [
+          _vm._v("only if they are not paying for their own tickets")
+        ]),
+        _vm._v(".\n          ")
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -28380,7 +28695,7 @@ render._withStripped = true
         
       }
     })();
-},{"vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/routes.js":[function(require,module,exports) {
+},{"/home/anderson/reservation-app/assets/student.svg":[["student.d0208aef.svg","assets/student.svg"],"assets/student.svg"],"/home/anderson/reservation-app/assets/teacher.svg":[["teacher.8ac98fbe.svg","assets/teacher.svg"],"assets/teacher.svg"],"/home/anderson/reservation-app/assets/parent.svg":[["parent.49d6fc2c.svg","assets/parent.svg"],"assets/parent.svg"],"vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/routes.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28467,7 +28782,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45415" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33125" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

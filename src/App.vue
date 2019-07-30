@@ -10,7 +10,21 @@
         </transition>
       </div>
     </div>
-    
+    <sui-modal v-model="hasAlert">
+      <sui-modal-header>Oops!</sui-modal-header>
+      <sui-modal-content>
+        This is an alert!
+        <sui-modal-description>
+          <sui-header>Title</sui-header>
+          <p>Something went wrong.</p>
+        </sui-modal-description>
+      </sui-modal-content>
+      <sui-modal-actions>
+        <sui-button positive @click.native="hasAlert = !hasAlert">
+          OK
+        </sui-button>
+      </sui-modal-actions>
+    </sui-modal>
   </div>
 </template>
 
@@ -84,21 +98,24 @@
         },
       ],
       transition: 'slide-right',
+      hasAlert: false,
     }),
     watch : {
       '$route' (to, from) {
         this.transition = to.meta.step < from.meta.step ? 'slide-right' : 'slide-left'
-      } 
+      }, 
     }
   }
 </script>
 
-<style>
+<style scoped>
   .ui.fluid.container { height : 100% !important }
   
-  .twelve.wide.column { z-index : 0 !important   }
+  .twelve.wide.column { z-index : 0 !important; display: flex !important; align-items: center !important; width: 80% !important }
   
-  .four.wide.column   { z-index : 1 !important   }
+  .four.wide.column   { z-index : 1 !important; width: 20% !important;   }
+
+  .ui.basic.center.aligned.segment { width: 100% !important }
   
 </style>
 
