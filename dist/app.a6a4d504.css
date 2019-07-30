@@ -1,1 +1,5 @@
 .ui.fluid.container { height : 100% !important }
+
+.twelve.wide.column { z-index : 0 !important   }
+
+.four.wide.column   { z-index : 1 !important   }

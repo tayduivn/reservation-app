@@ -5,20 +5,9 @@
         <sui-step-group size="small" vertical :steps="steps" />
       </div>
       <div class="twelve wide column">
-        <div class="ui basic center aligned segment">
-          <h1 class="ui huge header">
-            Welcome to our universe!
-            <br><br>
-            <div class="sub header">
-              We'll ask you few questions about your field trip in order to get all the information we 
-              need to provide the best experience for you and your group. Thank you for choosing us!
-            </div>
-          </h1>
-          <div class="ui huge primary button">
-            <i class="thumbs up icon"></i>
-            I am ready to start!
-          </div>
-        </div>
+        <transition :name="transition" mode="out-in">
+          <router-view />
+        </transition>
       </div>
     </div>
     
@@ -26,8 +15,9 @@
 </template>
 
 <script>
+
   export default {
-    data : () => ({
+    data: () => ({
       steps : [
         {
           active      : true,
@@ -92,13 +82,24 @@
           title       : 'Teacher Info',
           description : 'We need your info',
         },
-      ]
-    })
+      ],
+      transition: 'slide-right',
+    }),
+    watch : {
+      '$route' (to, from) {
+        this.transition = to.meta.step < from.meta.step ? 'slide-right' : 'slide-left'
+      } 
+    }
   }
 </script>
 
 <style>
   .ui.fluid.container { height : 100% !important }
+  
+  .twelve.wide.column { z-index : 0 !important   }
+  
+  .four.wide.column   { z-index : 1 !important   }
+  
 </style>
 
 
