@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="ui huge centered header">{{ attendance.students }}</div>
-          <input type="range" min="0" max="180" v-model="attendance.students">
+          <input type="range" min="0" max="180" v-model.number="attendance.students">
           <div class="ui pointing basic label">Slide left or right to change numbers</div>
         </div>
       </div>
@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="ui huge centered header">{{ attendance.teachers }}</div>
-          <input type="range" min="0" max="30" v-model="attendance.teachers">
+          <input type="range" min="0" max="30" v-model.number="attendance.teachers">
           <div class="ui pointing basic label">Slide left or right to change numbers</div>
         </div>
       </div>
@@ -43,7 +43,7 @@
             </div>
           </div>
           <div class="ui huge centered header">{{ attendance.parents }}</div>
-          <input type="range" min="0" max="60" v-model="attendance.parents">
+          <input type="range" min="0" max="60" v-model.number="attendance.parents">
           <div class="ui pointing basic label">Slide left or right to change numbers</div>
         </div>
       </div>
@@ -68,11 +68,24 @@
   export default {
     data: () => ({
       attendance : {
-        students : 0,
+        students : 20,
         teachers : 0,
         parents  : 0,
       }
-    })
+    }),
+    computed: {
+      RATIO() { return this.attendance.students / this.attendance.teachers },
+    },
+    watch:{
+      'attendance.students': function() {
+        if (this.attendance.students < 20)
+          this.$store.commit('SET_ERRORS', 'We require a minimim of 20 kids for a field trip.')
+      },
+      'attendance.teachers': function() {
+        if (this.RATIO < 10)
+          this.$store.commit('SET_ERRORS', 'In order for teacher to have free tickets, the student to teacher ratio cannot be greater than 10 to 1.')
+      }
+    }
   }
 </script>
 

@@ -10,17 +10,22 @@
         </transition>
       </div>
     </div>
-    <sui-modal v-model="hasAlert">
-      <sui-modal-header>Oops!</sui-modal-header>
+    <sui-modal v-model="hasErrors" basic>
+      <div class="ui icon header">
+        <i class="exclamation circle icon"></i> Oops...
+      </div>
       <sui-modal-content>
-        This is an alert!
+        Please fix the following errors:
         <sui-modal-description>
-          <sui-header>Title</sui-header>
-          <p>Something went wrong.</p>
+          <ul>
+            <li v-for="(error, i) in errors" :key="i">
+              {{ error }}
+            </li>
+          </ul>
         </sui-modal-description>
       </sui-modal-content>
       <sui-modal-actions>
-        <sui-button positive @click.native="hasAlert = !hasAlert">
+        <sui-button color="green" inverted icon="check" @click.native="clearErrors">
           OK
         </sui-button>
       </sui-modal-actions>
@@ -98,8 +103,17 @@
         },
       ],
       transition: 'slide-right',
-      hasAlert: false,
     }),
+    computed: {
+      hasErrors: {
+        set(value) { 
+          this.$store.commit('SET_HAS_ERRORS', value) 
+          this.$store.commit('CLEAR_ERRORS')
+        },
+        get()      { return this.$store.state.hasErrors          },
+      },
+      errors() { return this.$store.state.errors }
+    },
     watch : {
       '$route' (to, from) {
         this.transition = to.meta.step < from.meta.step ? 'slide-right' : 'slide-left'

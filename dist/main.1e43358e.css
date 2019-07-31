@@ -1,0 +1,8 @@
+.ui.fluid.container[data-v-cc123d] { height : 100% !important
+}
+.twelve.wide.column[data-v-cc123d] { z-index : 0 !important; display: flex !important; align-items: center !important; width: 80% !important
+}
+.four.wide.column[data-v-cc123d]   { z-index : 1 !important; width: 20% !important;
+}
+.ui.basic.center.aligned.segment[data-v-cc123d] { width: 100% !important
+}
