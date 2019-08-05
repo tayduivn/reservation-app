@@ -1,35 +1,32 @@
 <template>
   <div class="ui fluid container">
+    <sui-step-group fluid>
+      <sui-step v-for="(step, i) in steps"
+                :key="i" :icon="step.icon" 
+                :title="step.title" 
+                :description="step.description"
+                :active="$route.meta.step === (i + 1)"
+                :completed="$route.meta.step > (i + 1)"
+                :disabled="$route.meta.step < (i + 1)" />
+    </sui-step-group>
     <div class="ui grid">
-      <div class="four wide column">
-        <sui-step-group size="small" vertical :steps="steps" />
-      </div>
-      <div class="twelve wide column">
+      <div class="sixteen wide column">
+        <notifications :close-on-click="false" width="400">
+          <template slot="body" slot-scope="props">
+            <div class="ui blue icon message">
+              <i class="info circle icon"></i>
+              <div class="content">
+                <div class="header">Oops...</div>
+                <p>{{ props.item.text }}</p>
+              </div>
+            </div>
+          </template>
+        </notifications>
         <transition :name="transition" mode="out-in">
           <router-view />
         </transition>
       </div>
     </div>
-    <sui-modal v-model="hasErrors" basic>
-      <div class="ui icon header">
-        <i class="exclamation circle icon"></i> Oops...
-      </div>
-      <sui-modal-content>
-        Please fix the following errors:
-        <sui-modal-description>
-          <ul>
-            <li v-for="(error, i) in errors" :key="i">
-              {{ error }}
-            </li>
-          </ul>
-        </sui-modal-description>
-      </sui-modal-content>
-      <sui-modal-actions>
-        <sui-button color="green" inverted icon="check" @click.native="clearErrors">
-          OK
-        </sui-button>
-      </sui-modal-actions>
-    </sui-modal>
   </div>
 </template>
 
@@ -55,30 +52,16 @@
         {
           active      : false,
           disabled    : true,
-          icon        : 'star',
-          title       : 'How many shows?',
-          description : 'Most groups go with two!',
-        },
-        {
-          active      : false,
-          disabled    : true,
           icon        : 'calendar alternate',
-          title       : 'Dates',
-          description : 'When is your group coming?',
-        },
-        {
-          active      : false,
-          disabled    : true,
-          icon        : 'users',
-          title       : 'Attendance',
-          description : 'Who is coming?',
+          title       : 'Date',
+          description : 'When?',
         },
         {
           active      : false,
           disabled    : true,
           icon        : 'film',
           title       : 'Shows',
-          description : "What's your group watching?",
+          description : "What's shows?",
         },
         {
           active      : false,
@@ -92,7 +75,7 @@
           disabled    : true,
           icon        : 'university',
           title       : 'School Info',
-          description : 'We need your school info',
+          description : 'Tell us about your school',
         },
         {
           active      : false,
@@ -105,19 +88,23 @@
       transition: 'slide-right',
     }),
     computed: {
-      hasErrors: {
-        set(value) { 
-          this.$store.commit('SET_HAS_ERRORS', value) 
-          this.$store.commit('CLEAR_ERRORS')
-        },
-        get()      { return this.$store.state.hasErrors          },
-      },
       errors() { return this.$store.state.errors }
     },
     watch : {
       '$route' (to, from) {
         this.transition = to.meta.step < from.meta.step ? 'slide-right' : 'slide-left'
-      }, 
+      },
+      'errors': function(newValue) {
+        this.$notify({ clean: true })
+        if (this.errors.length > 0) {
+          this.errors.forEach(error => this.$notify({
+            text    : error,
+            duration: - 100,
+          }), this)
+        } else {
+          this.$notify({ clean: true })
+        }
+      } 
     }
   }
 </script>
@@ -130,6 +117,8 @@
   .four.wide.column   { z-index : 1 !important; width: 20% !important;   }
 
   .ui.basic.center.aligned.segment { width: 100% !important }
+
+  .vue-notification { margin: 0 !important }
   
 </style>
 

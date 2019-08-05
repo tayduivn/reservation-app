@@ -1,6 +1,11 @@
 <template>
   <div class="ui basic center aligned segment">
-    <h1>Attendance</h1>
+    <div class="ui center aligned huge header">
+      <div class="content">
+        Attendance
+        <div class="sub header">We have {{ $store.state.capacity }} seats</div>
+      </div>
+    </div>
     <div class="ui three column grid">
       <div class="column">
         <div class="ui segment">
@@ -12,8 +17,8 @@
               We require a <strong>minimum of paying 20 tickets</strong> to book a field trip.
             </div>
           </div>
-          <div class="ui huge centered header">{{ attendance.students }}</div>
-          <input type="range" min="0" max="180" v-model.number="attendance.students">
+          <div class="ui huge centered header">{{ students }}</div>
+          <input type="range" min="0" :max="capacity" v-model.number="students">
           <div class="ui pointing basic label">Slide left or right to change numbers</div>
         </div>
       </div>
@@ -27,8 +32,8 @@
               Chaperones and bus drivers also go here. For every 10 students, one teacher is free.
             </div>
           </div>
-          <div class="ui huge centered header">{{ attendance.teachers }}</div>
-          <input type="range" min="0" max="30" v-model.number="attendance.teachers">
+          <div class="ui huge centered header">{{ teachers }}</div>
+          <input type="range" min="0" :max="capacity" v-model.number="teachers">
           <div class="ui pointing basic label">Slide left or right to change numbers</div>
         </div>
       </div>
@@ -42,22 +47,22 @@
               <strong>only if they are not paying for their own tickets</strong>.
             </div>
           </div>
-          <div class="ui huge centered header">{{ attendance.parents }}</div>
-          <input type="range" min="0" max="60" v-model.number="attendance.parents">
+          <div class="ui huge centered header">{{ parents }}</div>
+          <input type="range" min="0" :max="capacity" v-model.number="parents">
           <div class="ui pointing basic label">Slide left or right to change numbers</div>
         </div>
       </div>
     </div>
     <br><br>
-    <div class="ui huge basic primary button" @click="$router.push({ name : 'home' })">
+    <div class="ui huge basic primary button" @click="$router.push({ name: 'home' })">
       <i class="left chevron icon"></i>
       Back
     </div>
-    <div class="ui huge basic black button">
+    <div class="ui huge basic black button" @click="$router.push({ name: 'home' })">
       <i class="refresh icon"></i>
       Start Over
     </div>
-    <div class="ui huge primary button">
+    <div class="ui huge primary button" @click="$router.push({ name: 'dates' })">
       Next
       <i class="right chevron icon"></i>
     </div>
@@ -66,24 +71,54 @@
 
 <script>
   export default {
-    data: () => ({
-      attendance : {
-        students : 20,
-        teachers : 0,
-        parents  : 0,
-      }
-    }),
     computed: {
-      RATIO() { return this.attendance.students / this.attendance.teachers },
-    },
-    watch:{
-      'attendance.students': function() {
-        if (this.attendance.students < 20)
-          this.$store.commit('SET_ERRORS', 'We require a minimim of 20 kids for a field trip.')
+      students: {
+        set(value) { this.$store.commit('SET_STUDENTS', value) },
+        get() { return this.$store.state.attendance.students    },
       },
-      'attendance.teachers': function() {
-        if (this.RATIO < 10)
-          this.$store.commit('SET_ERRORS', 'In order for teacher to have free tickets, the student to teacher ratio cannot be greater than 10 to 1.')
+      teachers: {
+        set(value) { this.$store.commit('SET_TEACHERS', value) },
+        get() { return this.$store.state.attendance.teachers    },
+      },
+      parents: {
+        set(value) { this.$store.commit('SET_PARENTS', value) },
+        get() { return this.$store.state.attendance.parents    },
+      },
+      capacity() {
+        return this.$store.state.capacity
+      },
+      attendance() {
+        return this.$store.state.attendance.students + this.$store.state.attendance.teachers + this.$store.state.attendance.parents
+      },
+      RATIO()  { return this.teachers / this.students },
+      errors() { return this.$store.state.errors }
+    },
+    watch: {
+      attendance: {
+        deep: true,
+        handler() {
+          if (this.attendance.students < 20) {
+            if (!this.errors.includes('Make sure you have at least 20 kids.'))
+              this.$store.commit('SET_ERRORS', 'Make sure you have at least 20 kids.')
+          } else {
+            if (this.errors.length > 0)
+              this.$store.commit('REMOVE_ERROR', 'Make sure you have at least 20 kids.')
+          }
+          if (this.RATIO > 0.1) {
+            if (!this.errors.includes('Make sure you have no more than 10 students per teacher.'))
+              this.$store.commit('SET_ERRORS', 'Make sure you have no more than 10 students per teacher.')
+          } else {
+            if (this.errors.length > 0)
+              this.$store.commit('REMOVE_ERROR', 'Make sure you have no more than 10 students per teacher.')
+          }
+          if (this.attendance > this.capacity) {
+            if (!this.errors.includes(`We can't seat more than ${this.capacity} people.`))
+                this.$store.commit('SET_ERRORS', `We can't seat more than ${this.capacity} people.`)
+          } else {
+            if (this.errors.length > 0)
+              this.$store.commit('REMOVE_ERROR', `We can't seat more than ${this.capacity} people.`)
+          }
+        }
       }
     }
   }
