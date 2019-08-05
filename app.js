@@ -71,7 +71,7 @@ var app = new Vue({
       // Flatpickr configuration
       config: {
         dateFormat: "l, F j, Y",
-        minDate   : "today",
+        minDate   : new Date(moment().add(2, 'weeks')),
         inline    : true,
       }
     }
