@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel index.html -p 3000 --no-source-maps"
   },
-  "browserslist": ["last 1 Chrome versions"],
+  "browserslist": [
+    "last 1 Chrome versions"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anderfernandes/reservation-app.git"
@@ -24,13 +26,14 @@
     "@vue/component-compiler-utils": "^3.0.0",
     "parcel-bundler": "^1.12.3",
     "semantic-ui-vue": "^0.8.1",
-    "vue-router": "^3.0.7",
+    "vue-router": "^3.1.1",
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.5.5",
     "animate.css": "^3.7.2",
     "axios": "^0.19.0",
+    "date-fns": "^2.0.0-beta.4",
     "flatpickr": "^4.6.2",
     "routes": "^2.1.0",
     "vue": "^2.6.10",

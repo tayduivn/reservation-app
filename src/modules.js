@@ -1,3 +1,5 @@
+import addDays from 'date-fns/addDays'
+
 export default {
   state: {
     hasErrors  : false,
@@ -8,7 +10,7 @@ export default {
       teachers : 2,
       parents  : 0,
     },
-    date: new Date().toISOString().slice(0, 10)
+    date: addDays(new Date(), 14)
   },
   mutations: {
     SET_ERRORS(state, payload) {
