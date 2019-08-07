@@ -32110,14 +32110,14 @@ var _default = {
   }
 };
 exports.default = _default;
-        var $5ad6fc = exports.default || module.exports;
+        var $cc123d = exports.default || module.exports;
       
-      if (typeof $5ad6fc === 'function') {
-        $5ad6fc = $5ad6fc.options;
+      if (typeof $cc123d === 'function') {
+        $cc123d = $cc123d.options;
       }
     
         /* template */
-        Object.assign($5ad6fc, (function () {
+        Object.assign($cc123d, (function () {
           var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -32145,18 +32145,54 @@ exports.default = _default;
         1
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "ui basic large blue label" }, [
-        _vm._v("\n    " + _vm._s(_vm.attendance.students) + " students\n  ")
-      ]),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.$route.name != "home",
+              expression: "$route.name != 'home'"
+            }
+          ],
+          staticClass: "ui basic large blue label"
+        },
+        [_vm._v("\n    " + _vm._s(_vm.attendance.students) + " students\n  ")]
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "ui basic large blue label" }, [
-        _vm._v("\n    " + _vm._s(_vm.attendance.teachers) + " teachers\n  ")
-      ]),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.$route.name != "home",
+              expression: "$route.name != 'home'"
+            }
+          ],
+          staticClass: "ui basic large blue label"
+        },
+        [_vm._v("\n    " + _vm._s(_vm.attendance.teachers) + " teachers\n  ")]
+      ),
       _vm._v(" "),
       _vm.attendance.parents > 0
-        ? _c("div", { staticClass: "ui basic large blue label" }, [
-            _vm._v("\n    " + _vm._s(_vm.attendance.parents) + " parents\n  ")
-          ])
+        ? _c(
+            "div",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.$route.name != "home",
+                  expression: "$route.name != 'home'"
+                }
+              ],
+              staticClass: "ui basic large blue label"
+            },
+            [_vm._v("\n    " + _vm._s(_vm.attendance.parents) + " parents\n  ")]
+          )
         : _vm._e(),
       _vm._v(" "),
       _vm._l(_vm.times, function(time, i) {
@@ -32226,7 +32262,7 @@ render._withStripped = true
             render: render,
             staticRenderFns: staticRenderFns,
             _compiled: true,
-            _scopeId: "data-v-5ad6fc",
+            _scopeId: "data-v-cc123d",
             functional: undefined
           };
         })());
@@ -32239,9 +32275,9 @@ render._withStripped = true
         if (api.compatible) {
           module.hot.accept();
           if (!module.hot.data) {
-            api.createRecord('$5ad6fc', $5ad6fc);
+            api.createRecord('$cc123d', $cc123d);
           } else {
-            api.reload('$5ad6fc', $5ad6fc);
+            api.reload('$cc123d', $cc123d);
           }
         }
 
@@ -32281,14 +32317,14 @@ exports.default = void 0;
 //
 var _default = {};
 exports.default = _default;
-        var $555e87 = exports.default || module.exports;
+        var $8525b5 = exports.default || module.exports;
       
-      if (typeof $555e87 === 'function') {
-        $555e87 = $555e87.options;
+      if (typeof $8525b5 === 'function') {
+        $8525b5 = $8525b5.options;
       }
     
         /* template */
-        Object.assign($555e87, (function () {
+        Object.assign($8525b5, (function () {
           var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -32355,9 +32391,9 @@ render._withStripped = true
         if (api.compatible) {
           module.hot.accept();
           if (!module.hot.data) {
-            api.createRecord('$555e87', $555e87);
+            api.createRecord('$8525b5', $8525b5);
           } else {
-            api.reload('$555e87', $555e87);
+            api.reload('$8525b5', $8525b5);
           }
         }
 
@@ -32520,14 +32556,14 @@ var _default = {
   }
 };
 exports.default = _default;
-        var $c4d7c7 = exports.default || module.exports;
+        var $fb0a22 = exports.default || module.exports;
       
-      if (typeof $c4d7c7 === 'function') {
-        $c4d7c7 = $c4d7c7.options;
+      if (typeof $fb0a22 === 'function') {
+        $fb0a22 = $fb0a22.options;
       }
     
         /* template */
-        Object.assign($c4d7c7, (function () {
+        Object.assign($fb0a22, (function () {
           var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -32777,16 +32813,16 @@ render._withStripped = true
         if (api.compatible) {
           module.hot.accept();
           if (!module.hot.data) {
-            api.createRecord('$c4d7c7', $c4d7c7);
+            api.createRecord('$fb0a22', $fb0a22);
           } else {
-            api.reload('$c4d7c7', $c4d7c7);
+            api.reload('$fb0a22', $fb0a22);
           }
         }
 
         
       }
     })();
-},{"C:\\Users\\afernandes\\desktop\\reservation-app\\assets\\student.svg":[["student.d0208aef.svg","assets/student.svg"],"assets/student.svg"],"C:\\Users\\afernandes\\desktop\\reservation-app\\assets\\teacher.svg":[["teacher.8ac98fbe.svg","assets/teacher.svg"],"assets/teacher.svg"],"C:\\Users\\afernandes\\desktop\\reservation-app\\assets\\parent.svg":[["parent.49d6fc2c.svg","assets/parent.svg"],"assets/parent.svg"],"vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
+},{"/home/anderson/reservation-app/assets/student.svg":[["student.d0208aef.svg","assets/student.svg"],"assets/student.svg"],"/home/anderson/reservation-app/assets/teacher.svg":[["teacher.8ac98fbe.svg","assets/teacher.svg"],"assets/teacher.svg"],"/home/anderson/reservation-app/assets/parent.svg":[["parent.49d6fc2c.svg","assets/parent.svg"],"assets/parent.svg"],"vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -50976,186 +51012,201 @@ var _default = {
   }
 };
 exports.default = _default;
-        var $2adaf1 = exports.default || module.exports;
+        var $d19698 = exports.default || module.exports;
       
-      if (typeof $2adaf1 === 'function') {
-        $2adaf1 = $2adaf1.options;
+      if (typeof $d19698 === 'function') {
+        $d19698 = $d19698.options;
       }
     
         /* template */
-        Object.assign($2adaf1, (function () {
+        Object.assign($d19698, (function () {
           var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "ui basic center aligned segment" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "ui grid" }, [
+  return _c(
+    "div",
+    { staticClass: "ui basic center aligned segment" },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "ui grid" }, [
+        _c(
+          "div",
+          { staticClass: "six wide column" },
+          [
+            _c("flatpickr", {
+              attrs: {
+                placeholder: "Click here and select a date",
+                config: _vm.config
+              },
+              on: { input: _vm.queryEvents },
+              model: {
+                value: _vm.date,
+                callback: function($$v) {
+                  _vm.date = $$v
+                },
+                expression: "date"
+              }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "ten wide column" },
+          [
+            _c("div", { staticClass: "ui dividing centered header" }, [
+              _c("i", { staticClass: "calendar alternate icon" }),
+              _vm._v(" "),
+              _c("div", { staticClass: "content" }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(
+                      _vm.date == null
+                        ? "Select a date"
+                        : _vm.format(new Date(_vm.date), "EEEE, MMMM d, yyyy")
+                    ) +
+                    "\n        "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.isLoadingEvents
+              ? _c("div", { staticClass: "ui basic segment" }, [
+                  _c("br"),
+                  _c("br"),
+                  _vm._v(" "),
+                  _vm._m(1)
+                ])
+              : _vm.filteredEvents == 0
+              ? _c("div", { staticClass: "ui warning icon message" }, [
+                  _c("i", { staticClass: "info circle icon" }),
+                  _vm._v(" "),
+                  _vm._m(2)
+                ])
+              : _vm.fetchFailed
+              ? _c("div", { staticClass: "ui error icon message" }, [
+                  _c("i", { staticClass: "warning circle icon" }),
+                  _vm._v(" "),
+                  _vm._m(3)
+                ])
+              : _vm._l(_vm.filteredEvents, function(event) {
+                  return _c(
+                    "div",
+                    {
+                      key: event.id,
+                      staticClass: "ui inverted segment",
+                      class: event.title == "Available" ? "blue" : "red"
+                    },
+                    [
+                      _c("div", { staticClass: "ui small inverted header" }, [
+                        _c("i", { staticClass: "calendar alternate icon" }),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "content" },
+                          [
+                            event.title == "Available"
+                              ? _c("sui-checkbox", {
+                                  attrs: { value: event.start.toISOString() },
+                                  model: {
+                                    value: _vm.times,
+                                    callback: function($$v) {
+                                      _vm.times = $$v
+                                    },
+                                    expression: "times"
+                                  }
+                                })
+                              : _vm._e(),
+                            _vm._v(
+                              "\n            " +
+                                _vm._s(event.title) +
+                                "\n            "
+                            ),
+                            _c("div", { staticClass: "sub header" }, [
+                              _vm._v(
+                                "\n              " +
+                                  _vm._s(
+                                    _vm.format(new Date(event.start), "hh:mm a")
+                                  ) +
+                                  " - " +
+                                  _vm._s(
+                                    _vm.format(new Date(event.end), "hh:mm a")
+                                  ) +
+                                  "\n            "
+                              )
+                            ])
+                          ],
+                          1
+                        )
+                      ])
+                    ]
+                  )
+                })
+          ],
+          2
+        )
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
       _c(
         "div",
-        { staticClass: "six wide column" },
-        [
-          _c("flatpickr", {
-            attrs: {
-              placeholder: "Click here and select a date",
-              config: _vm.config
-            },
-            on: { input: _vm.queryEvents },
-            model: {
-              value: _vm.date,
-              callback: function($$v) {
-                _vm.date = $$v
-              },
-              expression: "date"
+        {
+          staticClass: "ui huge basic primary button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "attendance" })
             }
-          })
-        ],
-        1
+          }
+        },
+        [
+          _c("i", { staticClass: "left chevron icon" }),
+          _vm._v("\n    Back\n  ")
+        ]
       ),
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "ten wide column" },
+        {
+          staticClass: "ui huge basic black button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "home" })
+            }
+          }
+        },
         [
-          _c("div", { staticClass: "ui dividing centered header" }, [
-            _c("i", { staticClass: "calendar alternate icon" }),
-            _vm._v(" "),
-            _c("div", { staticClass: "content" }, [
-              _vm._v(
-                "\n          " +
-                  _vm._s(
-                    _vm.date == null
-                      ? "Select a date"
-                      : _vm.format(new Date(_vm.date), "EEEE, MMMM d, yyyy")
-                  ) +
-                  "\n        "
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _vm.isLoadingEvents
-            ? _c("div", { staticClass: "ui basic segment" }, [
-                _c("br"),
-                _c("br"),
-                _vm._v(" "),
-                _vm._m(1)
-              ])
-            : _vm.filteredEvents == 0
-            ? _c("div", { staticClass: "ui warning icon message" }, [
-                _c("i", { staticClass: "info circle icon" }),
-                _vm._v(" "),
-                _vm._m(2)
-              ])
-            : _vm.fetchFailed
-            ? _c("div", { staticClass: "ui error icon message" }, [
-                _c("i", { staticClass: "warning circle icon" }),
-                _vm._v(" "),
-                _vm._m(3)
-              ])
-            : _vm._l(_vm.filteredEvents, function(event) {
-                return _c(
-                  "div",
-                  {
-                    key: event.id,
-                    staticClass: "ui inverted segment",
-                    class: event.title == "Available" ? "blue" : "red"
-                  },
-                  [
-                    _c("div", { staticClass: "ui small inverted header" }, [
-                      _c("i", { staticClass: "calendar alternate icon" }),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "content" },
-                        [
-                          event.title == "Available"
-                            ? _c("sui-checkbox", {
-                                attrs: { value: event.start.toISOString() },
-                                model: {
-                                  value: _vm.times,
-                                  callback: function($$v) {
-                                    _vm.times = $$v
-                                  },
-                                  expression: "times"
-                                }
-                              })
-                            : _vm._e(),
-                          _vm._v(
-                            "\n            " +
-                              _vm._s(event.title) +
-                              "\n            "
-                          ),
-                          _c("div", { staticClass: "sub header" }, [
-                            _vm._v(
-                              "\n              " +
-                                _vm._s(
-                                  _vm.format(new Date(event.start), "hh:mm a")
-                                ) +
-                                " - " +
-                                _vm._s(
-                                  _vm.format(new Date(event.end), "hh:mm a")
-                                ) +
-                                "\n            "
-                            )
-                          ])
-                        ],
-                        1
-                      )
-                    ])
-                  ]
-                )
-              })
-        ],
-        2
+          _c("i", { staticClass: "refresh icon" }),
+          _vm._v("\n    Start Over\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "sui-button",
+        {
+          attrs: {
+            primary: "",
+            size: "huge",
+            disabled: !(_vm.times.length > 0)
+          },
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "shows" })
+            }
+          }
+        },
+        [
+          _vm._v("\n    Next\n    "),
+          _c("i", { staticClass: "right chevron icon" })
+        ]
       )
-    ]),
-    _vm._v(" "),
-    _c("br"),
-    _c("br"),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "ui huge basic primary button",
-        on: {
-          click: function($event) {
-            return _vm.$router.push({ name: "attendance" })
-          }
-        }
-      },
-      [_c("i", { staticClass: "left chevron icon" }), _vm._v("\n    Back\n  ")]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "ui huge basic black button",
-        on: {
-          click: function($event) {
-            return _vm.$router.push({ name: "home" })
-          }
-        }
-      },
-      [_c("i", { staticClass: "refresh icon" }), _vm._v("\n    Start Over\n  ")]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "ui huge primary button",
-        on: {
-          click: function($event) {
-            return _vm.$router.push({ name: "shows" })
-          }
-        }
-      },
-      [
-        _vm._v("\n    Next\n    "),
-        _c("i", { staticClass: "right chevron icon" })
-      ]
-    )
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -51227,9 +51278,9 @@ render._withStripped = true
         if (api.compatible) {
           module.hot.accept();
           if (!module.hot.data) {
-            api.createRecord('$2adaf1', $2adaf1);
+            api.createRecord('$d19698', $d19698);
           } else {
-            api.reload('$2adaf1', $2adaf1);
+            api.reload('$d19698', $d19698);
           }
         }
 
@@ -51370,155 +51421,170 @@ var _default = {
   }
 };
 exports.default = _default;
-        var $7943e3 = exports.default || module.exports;
+        var $8471bf = exports.default || module.exports;
       
-      if (typeof $7943e3 === 'function') {
-        $7943e3 = $7943e3.options;
+      if (typeof $8471bf === 'function') {
+        $8471bf = $8471bf.options;
       }
     
         /* template */
-        Object.assign($7943e3, (function () {
+        Object.assign($8471bf, (function () {
           var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "ui basic center aligned segment" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "ui one column grid" },
-      _vm._l(_vm.times, function(time, i) {
-        return _c(
-          "div",
-          { key: i, staticClass: "column" },
-          [
-            _c("div", { staticClass: "ui dividing header" }, [
-              _vm._v(
-                "\n        " +
-                  _vm._s(
-                    _vm.format(
-                      new Date(time),
-                      "EEEE, MMMM d, yyyy 'at' hh:mm a"
-                    )
-                  ) +
-                  "\n      "
-              )
-            ]),
-            _vm._v(" "),
-            _c("sui-dropdown", {
-              attrs: {
-                fluid: "",
-                placeholder: "Select Show #" + (i + 1),
-                search: "",
-                selection: "",
-                options: _vm.available_shows
-              },
-              model: {
-                value: _vm.shows[i],
-                callback: function($$v) {
-                  _vm.$set(_vm.shows, i, $$v)
+  return _c(
+    "div",
+    { staticClass: "ui basic center aligned segment" },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "ui one column grid" },
+        _vm._l(_vm.times, function(time, i) {
+          return _c(
+            "div",
+            { key: i, staticClass: "column" },
+            [
+              _c("div", { staticClass: "ui dividing header" }, [
+                _vm._v(
+                  "\n        " +
+                    _vm._s(
+                      _vm.format(
+                        new Date(time),
+                        "EEEE, MMMM d, yyyy 'at' hh:mm a"
+                      )
+                    ) +
+                    "\n      "
+                )
+              ]),
+              _vm._v(" "),
+              _c("sui-dropdown", {
+                attrs: {
+                  fluid: "",
+                  placeholder: "Select Show #" + (i + 1),
+                  search: "",
+                  selection: "",
+                  options: _vm.available_shows
                 },
-                expression: "shows[i]"
-              }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "ui segment" }, [
-              _c("div", { staticClass: "ui items" }, [
-                _vm.shows[i]
-                  ? _c("div", { staticClass: "item" }, [
-                      _c("div", { staticClass: "image" }, [
-                        _c("img", {
-                          attrs: { src: _vm.getShow(_vm.shows[i]).cover }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "content" }, [
-                        _c("div", { staticClass: "header" }, [
-                          _vm._v(_vm._s(_vm.getShow(_vm.shows[i]).name))
+                model: {
+                  value: _vm.shows[i],
+                  callback: function($$v) {
+                    _vm.$set(_vm.shows, i, $$v)
+                  },
+                  expression: "shows[i]"
+                }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "ui segment" }, [
+                _c("div", { staticClass: "ui items" }, [
+                  _vm.shows[i]
+                    ? _c("div", { staticClass: "item" }, [
+                        _c("div", { staticClass: "image" }, [
+                          _c("img", {
+                            attrs: { src: _vm.getShow(_vm.shows[i]).cover }
+                          })
                         ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "meta" }, [
-                          _c("div", { staticClass: "ui black label" }, [
-                            _vm._v(_vm._s(_vm.getShow(_vm.shows[i]).type))
+                        _c("div", { staticClass: "content" }, [
+                          _c("div", { staticClass: "header" }, [
+                            _vm._v(_vm._s(_vm.getShow(_vm.shows[i]).name))
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "ui black label" }, [
-                            _vm._v(
-                              _vm._s(_vm.getShow(_vm.shows[i]).duration) +
-                                " minutes"
-                            )
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "description" }, [
-                          _c("p", [
-                            _vm._v(
-                              _vm._s(_vm.getShow(_vm.shows[i]).description)
-                            )
+                          _c("div", { staticClass: "meta" }, [
+                            _c("div", { staticClass: "ui black label" }, [
+                              _vm._v(_vm._s(_vm.getShow(_vm.shows[i]).type))
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "ui black label" }, [
+                              _vm._v(
+                                _vm._s(_vm.getShow(_vm.shows[i]).duration) +
+                                  " minutes"
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "description" }, [
+                            _c("p", [
+                              _vm._v(
+                                _vm._s(_vm.getShow(_vm.shows[i]).description)
+                              )
+                            ])
                           ])
                         ])
                       ])
-                    ])
-                  : _c("div", { staticClass: "item" }, [
-                      _vm._m(1, true),
-                      _vm._v(" "),
-                      _vm._m(2, true)
-                    ])
+                    : _c("div", { staticClass: "item" }, [
+                        _vm._m(1, true),
+                        _vm._v(" "),
+                        _vm._m(2, true)
+                      ])
+                ])
               ])
-            ])
-          ],
-          1
-        )
-      }),
-      0
-    ),
-    _vm._v(" "),
-    _c("br"),
-    _c("br"),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "ui huge basic primary button",
-        on: {
-          click: function($event) {
-            return _vm.$router.push({ name: "dates" })
+            ],
+            1
+          )
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic primary button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "dates" })
+            }
           }
-        }
-      },
-      [_c("i", { staticClass: "left chevron icon" }), _vm._v("\n    Back\n  ")]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "ui huge basic black button",
-        on: {
-          click: function($event) {
-            return _vm.$router.push({ name: "home" })
+        },
+        [
+          _c("i", { staticClass: "left chevron icon" }),
+          _vm._v("\n    Back\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic black button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "home" })
+            }
           }
-        }
-      },
-      [_c("i", { staticClass: "refresh icon" }), _vm._v("\n    Start Over\n  ")]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "ui huge primary button",
-        on: {
-          click: function($event) {
-            return _vm.$router.push({ name: "post-show" })
+        },
+        [
+          _c("i", { staticClass: "refresh icon" }),
+          _vm._v("\n    Start Over\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "sui-button",
+        {
+          attrs: {
+            primary: "",
+            size: "huge",
+            disabled: !(_vm.shows.length > 0)
+          },
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "post-show" })
+            }
           }
-        }
-      },
-      [
-        _vm._v("\n    Next\n    "),
-        _c("i", { staticClass: "right chevron icon" })
-      ]
-    )
-  ])
+        },
+        [
+          _vm._v("\n    Next\n    "),
+          _c("i", { staticClass: "right chevron icon" })
+        ]
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -51579,16 +51645,271 @@ render._withStripped = true
         if (api.compatible) {
           module.hot.accept();
           if (!module.hot.data) {
-            api.createRecord('$7943e3', $7943e3);
+            api.createRecord('$8471bf', $8471bf);
           } else {
-            api.reload('$7943e3', $7943e3);
+            api.reload('$8471bf', $8471bf);
           }
         }
 
         
       }
     })();
-},{"axios":"node_modules/axios/index.js","date-fns/format":"node_modules/date-fns/esm/format/index.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/routes.js":[function(require,module,exports) {
+},{"axios":"node_modules/axios/index.js","date-fns/format":"node_modules/date-fns/esm/format/index.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/PostShow.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _axios = _interopRequireDefault(require("axios"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  data: () => ({
+    products: []
+  }),
+
+  async created() {
+    this.fetchProducts();
+  },
+
+  computed: {
+    post_show: {
+      get() {
+        return this.$store.state.post_show;
+      },
+
+      set(value) {
+        this.$store.commit('SET_POST_SHOW', value);
+      }
+
+    }
+  },
+  methods: {
+    async fetchProducts() {
+      try {
+        const response = await _axios.default.get(`${SERVER}/api/public/products`);
+        Object.assign(this, {
+          products: response.data.data
+        });
+      } catch (error) {
+        this.$store.commit('SET_ERRORS', error.message);
+      }
+    }
+
+  }
+};
+exports.default = _default;
+        var $4d5604 = exports.default || module.exports;
+      
+      if (typeof $4d5604 === 'function') {
+        $4d5604 = $4d5604.options;
+      }
+    
+        /* template */
+        Object.assign($4d5604, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "ui basic center aligned segment" },
+    [
+      _c("div", { staticClass: "ui center aligned huge header" }, [
+        _c(
+          "div",
+          {
+            staticClass: "content",
+            staticStyle: { "text-align": "center !important" }
+          },
+          [
+            _vm._v("\n      Post Show\n      "),
+            _c("div", { staticClass: "sub header" }, [
+              _vm._v(
+                "\n        After your " +
+                  _vm._s(
+                    _vm.$store.state.times.length == 1 ? "show" : "shows"
+                  ) +
+                  ", we can give you one of \n        the following live presentations. Click on the one you would like to see.\n      "
+              )
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "ui centered cards" },
+        _vm._l(_vm.products, function(product) {
+          return _c(
+            "div",
+            {
+              key: product.id,
+              staticClass: "card",
+              on: {
+                click: function($event) {
+                  _vm.post_show = product.name
+                }
+              }
+            },
+            [
+              _c("div", { staticClass: "image" }, [
+                _vm.post_show == product.name
+                  ? _c("div", { staticClass: "ui blue right corner label" }, [
+                      _c("i", { staticClass: "heart icon" })
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("img", { attrs: { src: product.cover, alt: "" } })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "header" }, [
+                  _vm._v(_vm._s(product.name))
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "description" }, [
+                  _vm._v(_vm._s(product.description))
+                ])
+              ])
+            ]
+          )
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic primary button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "shows" })
+            }
+          }
+        },
+        [
+          _c("i", { staticClass: "left chevron icon" }),
+          _vm._v("\n    Back\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic black button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "home" })
+            }
+          }
+        },
+        [
+          _c("i", { staticClass: "refresh icon" }),
+          _vm._v("\n    Start Over\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "sui-button",
+        {
+          attrs: {
+            primary: "",
+            size: "huge",
+            disabled: !(_vm.post_show != null)
+          },
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "school-info" })
+            }
+          }
+        },
+        [
+          _vm._v("\n    Next\n    "),
+          _c("i", { staticClass: "right chevron icon" })
+        ]
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$4d5604', $4d5604);
+          } else {
+            api.reload('$4d5604', $4d5604);
+          }
+        }
+
+        
+      }
+    })();
+},{"axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/routes.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51603,6 +51924,8 @@ var _Attendance = _interopRequireDefault(require("./components/Attendance.vue"))
 var _Dates = _interopRequireDefault(require("./components/Dates.vue"));
 
 var _Shows = _interopRequireDefault(require("./components/Shows.vue"));
+
+var _PostShow = _interopRequireDefault(require("./components/PostShow.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51636,10 +51959,17 @@ var _default = {
     meta: {
       step: 4
     }
+  }, {
+    path: '/post-show',
+    name: 'post-show',
+    component: _PostShow.default,
+    meta: {
+      step: 5
+    }
   }]
 };
 exports.default = _default;
-},{"./components/Home.vue":"src/components/Home.vue","./components/Attendance.vue":"src/components/Attendance.vue","./components/Dates.vue":"src/components/Dates.vue","./components/Shows.vue":"src/components/Shows.vue"}],"src/modules.js":[function(require,module,exports) {
+},{"./components/Home.vue":"src/components/Home.vue","./components/Attendance.vue":"src/components/Attendance.vue","./components/Dates.vue":"src/components/Dates.vue","./components/Shows.vue":"src/components/Shows.vue","./components/PostShow.vue":"src/components/PostShow.vue"}],"src/modules.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51664,7 +51994,8 @@ var _default = {
     date: null,
     min_date: (0, _addDays.default)(new Date(), 14),
     times: [],
-    shows: []
+    shows: [],
+    post_show: null
   },
   mutations: {
     SET_ERRORS(state, payload) {
@@ -51728,6 +52059,12 @@ var _default = {
     SET_SHOWS(state, payload) {
       Object.assign(state, {
         shows: payload
+      });
+    },
+
+    SET_POST_SHOW(state, payload) {
+      Object.assign(state, {
+        post_show: payload
       });
     }
 
@@ -52930,7 +53267,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62664" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43455" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

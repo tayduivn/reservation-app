@@ -51,10 +51,10 @@
       <i class="refresh icon"></i>
       Start Over
     </div>
-    <div class="ui huge primary button" @click="$router.push({ name: 'post-show' })">
+    <sui-button primary size="huge" :disabled="!(shows.length > 0)" @click="$router.push({ name: 'post-show' })">
       Next
       <i class="right chevron icon"></i>
-    </div>
+    </sui-button>
   </div>
 </template>
 

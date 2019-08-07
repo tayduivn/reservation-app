@@ -14,6 +14,7 @@ export default {
     min_date: addDays(new Date(), 14),
     times: [],
     shows: [],
+    post_show: null,
   },
   mutations: {
     SET_ERRORS(state, payload) {
@@ -51,6 +52,9 @@ export default {
     },
     SET_SHOWS(state, payload) {
       Object.assign(state, { shows: payload })
+    },
+    SET_POST_SHOW(state, payload) {
+      Object.assign(state, { post_show: payload })
     }
   },
   actions: {

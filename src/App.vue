@@ -10,13 +10,13 @@
                 :disabled="$route.meta.step < (i + 1)" />
     </sui-step-group>
     
-    <div class="ui basic large blue label">
+    <div class="ui basic large blue label" v-show="$route.name != 'home'">
       {{ attendance.students }} students
     </div>
-    <div class="ui basic large blue label">
+    <div class="ui basic large blue label" v-show="$route.name != 'home'">
       {{ attendance.teachers }} teachers
     </div>
-    <div class="ui basic large blue label" v-if="attendance.parents > 0">
+    <div class="ui basic large blue label" v-show="$route.name != 'home'" v-if="attendance.parents > 0">
       {{ attendance.parents }} parents
     </div>
     <div class="ui basic large blue label" v-for="(time, i) in times" :key="i">

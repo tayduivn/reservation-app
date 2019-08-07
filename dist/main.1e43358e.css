@@ -1,12 +1,12 @@
-.ui.fluid.container[data-v-5ad6fc] { height : 100% !important
+.ui.fluid.container[data-v-cc123d] { height : 100% !important
 }
-.twelve.wide.column[data-v-5ad6fc] { z-index : 0 !important; display: flex !important; align-items: center !important; width: 80% !important
+.twelve.wide.column[data-v-cc123d] { z-index : 0 !important; display: flex !important; align-items: center !important; width: 80% !important
 }
-.four.wide.column[data-v-5ad6fc]   { z-index : 1 !important; width: 20% !important;
+.four.wide.column[data-v-cc123d]   { z-index : 1 !important; width: 20% !important;
 }
-.ui.basic.center.aligned.segment[data-v-5ad6fc] { width: 100% !important
+.ui.basic.center.aligned.segment[data-v-cc123d] { width: 100% !important
 }
-.vue-notification[data-v-5ad6fc] { margin: 0 !important
+.vue-notification[data-v-cc123d] { margin: 0 !important
 }.flatpickr-calendar {
   background: transparent;
   opacity: 0;
