@@ -9,7 +9,22 @@
                 :completed="$route.meta.step > (i + 1)"
                 :disabled="$route.meta.step < (i + 1)" />
     </sui-step-group>
-    <div class="ui grid">
+    
+    <div class="ui basic large blue label">
+      {{ attendance.students }} students
+    </div>
+    <div class="ui basic large blue label">
+      {{ attendance.teachers }} teachers
+    </div>
+    <div class="ui basic large blue label" v-if="attendance.parents > 0">
+      {{ attendance.parents }} parents
+    </div>
+    <div class="ui basic large blue label" v-for="(time, i) in times" :key="i">
+      <div class="detail" style="margin-left:0">#{{ i + 1 }}</div>
+      {{ format(new Date(time), "EEEE, MMMM d, yyyy 'at' hh:mm a") }}
+    </div>
+    
+    <div class="ui grid container">
       <div class="sixteen wide column">
         <notifications :close-on-click="false" width="400">
           <template slot="body" slot-scope="props">
@@ -31,6 +46,8 @@
 </template>
 
 <script>
+
+  import format from 'date-fns/format'
 
   export default {
     data: () => ({
@@ -88,7 +105,12 @@
       transition: 'slide-right',
     }),
     computed: {
-      errors() { return this.$store.state.errors }
+      errors() { return this.$store.state.errors },
+      times() { return this.$store.state.times },
+      attendance() { return this.$store.state.attendance },
+    },
+    methods: {
+      format,
     },
     watch : {
       '$route' (to, from) {

@@ -2,22 +2,19 @@
   <div class="ui basic center aligned segment">
     <div class="ui huge center aligned header">
       <div class="content">Date</div>
-      <div class="sub header">
-        {{ format(new Date(date), 'EEEE, MMMM d, yyyy') }}
-      </div>
     </div>
     <div class="ui grid">
-      <div class="ui five wide column">
+      <div class="six wide column">
         <flatpickr placeholder="Click here and select a date"
                     v-model="date"
                     :config="config"
                     @input="queryEvents">
       </div>
-      <div class="ui eleven wide column">
+      <div class="ten wide column">
         <div class="ui dividing centered header">
           <i class="calendar alternate icon"></i>
           <div class="content">
-            {{ date == null ? "Select a date" : date }}
+            {{ date == null ? "Select a date" : format(new Date(date), 'EEEE, MMMM d, yyyy') }}
           </div>
         </div>
         <!-- Loader Spinning Wheel -->
@@ -61,6 +58,7 @@
           <div class="ui small inverted header">
             <i class="calendar alternate icon"></i>
             <div class="content">
+              <sui-checkbox v-if="event.title == 'Available'" :value="event.start.toISOString()" v-model="times"></sui-checkbox>
               {{ event.title }}
               <div class="sub header">
                 {{ format(new Date(event.start), 'hh:mm a') }} - {{ format(new Date(event.end), 'hh:mm a') }}
@@ -79,7 +77,7 @@
       <i class="refresh icon"></i>
       Start Over
     </div>
-    <div class="ui huge primary button" @click="$router.push({ name: 'number-of-shows' })">
+    <div class="ui huge primary button" @click="$router.push({ name: 'shows' })">
       Next
       <i class="right chevron icon"></i>
     </div>
@@ -89,7 +87,7 @@
 <script>
   
   import axios from 'axios'
-  import { format, startOfDay, endOfDay } from 'date-fns'
+  import { format, startOfDay, endOfDay, addHours } from 'date-fns'
   import flatpickr from 'vue-flatpickr-component'
   import 'flatpickr/dist/flatpickr.css'
 
@@ -107,7 +105,7 @@
       return {
         config: {
           dateFormat: "l, F j, Y",
-          minDate   : this.$store.state.date,
+          minDate   : this.$store.state.min_date,
           inline    : true,
         },
         isLoadingEvents: false,
@@ -115,32 +113,44 @@
         events: [],
       }
     },
+    async created() {
+      await this.queryEvents()
+    },
     components: {
       flatpickr,
     },
     computed: {
       date: {
         get() { return this.$store.state.date },
-        set(value) { return this.$store.dispatch('SET_DATE', value) }
+        set(value) { this.$store.commit('SET_DATE', value) }
+      },
+      times: {
+        get() { return this.$store.state.times },
+        set(value) { this.$store.commit('SET_TIMES', value) }
       },
       // Filtering Events
       filteredEvents() {
 
         // Create a schedule of available shows for every possible show time
-        let mockEvents = times.map(time => ({
-          title     : "Available",
-          start     : startOfDay(new Date(this.date)),
-          end       : endOfDay(new Date(this.date)),
-          isSelected: false,
-        }))
-
-        console.log(mockEvents)
+        let mockEvents = times.map(time => {
+          const date  = new Date(this.date)
+          let start   = new Date(date.setHours(time.hour))
+          start       = new Date(start.setMinutes(time.minute))
+          start       = new Date(start.setSeconds(0))
+          const end   = addHours(start, 1)
+          return {
+            title     : "Available",
+            start,
+            end,
+            isSelected: false,
+          }
+        })
 
         // Get taken shows from backend
         let scheduledEvents = this.events
 
         // Will hold schedule of events available and unavailable (if there are any)
-        let filteredSchedule = [];
+        let filteredSchedule = []
 
         // If there's a date set
         if (this.date != null)
@@ -149,7 +159,7 @@
           mockEvents.forEach(mockEvent => {
             let isTaken = false
             scheduledEvents.forEach(scheduledEvent => {
-              if (scheduledEvent.start == mockEvent.start) {
+              if (new Date(scheduledEvent.start).toISOString() === new Date(mockEvent.start).toISOString()) {
                 isTaken = true
                 filteredSchedule.push(scheduledEvent)
               }
@@ -180,10 +190,13 @@
         this.isLoadingEvents = true
         try {
           const seats = this.$store.getters.seats
-          const response = await axios.get(`${SERVER}/api/public/findAvailableEvents?date=${this.date}&seats=${seats}`)
+          const date  = new Date(this.date).toISOString().slice(0, 10)
+          const response = await axios.get(`${SERVER}/api/public/findAvailableEvents?date=${date}&seats=${seats}`)
           Object.assign(this, { events: response.data.data })
+          this.fetchFailed     = false
           this.isLoadingEvents = false
         } catch(error) {
+          this.fetchFailed = true
           this.$store.commit('SET_ERRORS', error.message)
         }
       }
@@ -193,5 +206,6 @@
 
 <style>
   .flatpickr-input { display : none !important }
+  .content { text-align: left !important }
 </style>
 

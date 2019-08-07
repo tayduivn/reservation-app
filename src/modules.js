@@ -10,7 +10,10 @@ export default {
       teachers : 2,
       parents  : 0,
     },
-    date: addDays(new Date(), 14)
+    date: null,
+    min_date: addDays(new Date(), 14),
+    times: [],
+    shows: [],
   },
   mutations: {
     SET_ERRORS(state, payload) {
@@ -42,12 +45,18 @@ export default {
     },
     SET_DATE(state, payload) {
       Object.assign(state, { date: payload })
+    },
+    SET_TIMES(state, payload) {
+      Object.assign(state, { times: payload })
+    },
+    SET_SHOWS(state, payload) {
+      Object.assign(state, { shows: payload })
     }
   },
   actions: {
     
   },
   getters: {
-    seats: state => state.parents + state.teachers + state.students,
+    seats: state => state.attendance.parents + state.attendance.teachers + state.attendance.students,
   }
 }
