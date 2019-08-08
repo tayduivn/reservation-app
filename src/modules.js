@@ -25,6 +25,12 @@ export default {
       zip          : '',
       phone        : '',
     },
+    teacher: {
+      first_name: '',
+      last_name : '',
+      email     : '',
+      phone     : '',
+    },
     special_needs: false,
     tax_exempt   : false,
   },
@@ -76,7 +82,10 @@ export default {
     },
     SET_NEW_ORGANIZATION(state, payload) {
       Object.assign(state, { new_organization: payload })
-    }
+    },
+    SET_TEACHER(state, payload) {
+      Object.assign(state, { teacher: payload })
+    },
   },
   actions: {
     

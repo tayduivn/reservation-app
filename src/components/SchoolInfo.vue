@@ -35,11 +35,11 @@
       <div class="two fields">
         <div class="field">
           <label>ZIP</label>
-          <input type="text" placeholder="ZIP" v-model="new_organization.zip">
+          <input type="text" placeholder="ZIP" maxlength="5" v-model="new_organization.zip">
         </div>
         <div class="field">
           <label>Phone</label>
-          <input type="text" placeholder="Phone" v-model="new_organization.phone">
+          <the-mask :mask="['(###) ###-####']" masked v-model="new_organization.phone" placeholder="Phone"></the-mask>
         </div>
       </div>
     </div>
@@ -66,6 +66,7 @@
   export default {
     data: () => ({
       organizations: [],
+      phone: null,
     }),
     async created() {
       await this.fetchOrganizations()
@@ -80,7 +81,16 @@
         get() { return this.$store.state.new_organization }
       },
       isValid() {
-        return this.new_organization.name.length > 2 && this.new_organization.address.length > 2
+        return this.organization != 0 || 
+               (
+               this.new_organization.name.length    > 2 && 
+               this.new_organization.address.length > 2 &&
+               this.new_organization.city.length    > 2 &&
+               this.new_organization.state.length   > 2 &&
+               this.new_organization.zip.length    == 5 &&
+               this.new_organization.phone.length  == 14
+               )
+               
       },
     },
     methods: {
@@ -94,7 +104,7 @@
         } catch (error) {
           this.$store.commit('SET_ERRORS', error.message)
         }
-      }
+      },
     }
   }
 </script>

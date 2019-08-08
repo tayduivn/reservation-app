@@ -52012,7 +52012,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 var _default = {
   data: () => ({
-    organizations: []
+    organizations: [],
+    phone: null
   }),
 
   async created() {
@@ -52042,7 +52043,7 @@ var _default = {
     },
 
     isValid() {
-      return this.new_organization.name.length > 2 && this.new_organization.address.length > 2;
+      return this.organization != 0 || this.new_organization.name.length > 2 && this.new_organization.address.length > 2 && this.new_organization.city.length > 2 && this.new_organization.state.length > 2 && this.new_organization.zip.length == 5 && this.new_organization.phone.length == 14;
     }
 
   },
@@ -52249,7 +52250,7 @@ exports.default = _default;
                     expression: "new_organization.zip"
                   }
                 ],
-                attrs: { type: "text", placeholder: "ZIP" },
+                attrs: { type: "text", placeholder: "ZIP", maxlength: "5" },
                 domProps: { value: _vm.new_organization.zip },
                 on: {
                   input: function($event) {
@@ -52262,30 +52263,29 @@ exports.default = _default;
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "field" }, [
-              _c("label", [_vm._v("Phone")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
+            _c(
+              "div",
+              { staticClass: "field" },
+              [
+                _c("label", [_vm._v("Phone")]),
+                _vm._v(" "),
+                _c("the-mask", {
+                  attrs: {
+                    mask: ["(###) ###-####"],
+                    masked: "",
+                    placeholder: "Phone"
+                  },
+                  model: {
                     value: _vm.new_organization.phone,
+                    callback: function($$v) {
+                      _vm.$set(_vm.new_organization, "phone", $$v)
+                    },
                     expression: "new_organization.phone"
                   }
-                ],
-                attrs: { type: "text", placeholder: "Phone" },
-                domProps: { value: _vm.new_organization.phone },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.new_organization, "phone", $event.target.value)
-                  }
-                }
-              })
-            ])
+                })
+              ],
+              1
+            )
           ])
         ]
       ),
@@ -52394,7 +52394,310 @@ render._withStripped = true
         
       }
     })();
-},{"axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/routes.js":[function(require,module,exports) {
+},{"axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/TeacherInfo.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  data: () => ({}),
+  computed: {
+    teacher: {
+      get() {
+        return this.$store.state.teacher;
+      },
+
+      set(value) {
+        this.$store.commit('SET_TEACHER', payload);
+      }
+
+    },
+
+    isValid() {
+      return this.teacher.first_name.length > 1 && this.teacher.last_name.length > 1 && this.teacher.email.includes('@') && this.teacher.email.length > 5 && this.teacher.phone.length == 14;
+    }
+
+  }
+};
+exports.default = _default;
+        var $2926fb = exports.default || module.exports;
+      
+      if (typeof $2926fb === 'function') {
+        $2926fb = $2926fb.options;
+      }
+    
+        /* template */
+        Object.assign($2926fb, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "ui basic center aligned segment" },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "ui form" }, [
+        _c("div", { staticClass: "two fields" }, [
+          _c("div", { staticClass: "field" }, [
+            _c("label", [_vm._v("First Name")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.teacher.first_name,
+                  expression: "teacher.first_name"
+                }
+              ],
+              attrs: { type: "text", placeholder: "First Name" },
+              domProps: { value: _vm.teacher.first_name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.teacher, "first_name", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "field" }, [
+            _c("label", [_vm._v("Last Name")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.teacher.last_name,
+                  expression: "teacher.last_name"
+                }
+              ],
+              attrs: { type: "text", placeholder: "Last Name" },
+              domProps: { value: _vm.teacher.last_name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.teacher, "last_name", $event.target.value)
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "two fields" }, [
+          _c("div", { staticClass: "field" }, [
+            _c("label", [_vm._v("Email")]),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.teacher.email,
+                  expression: "teacher.email"
+                }
+              ],
+              attrs: { type: "email", placeholder: "Email" },
+              domProps: { value: _vm.teacher.email },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.teacher, "email", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "field" },
+            [
+              _c("label", [_vm._v("Phone")]),
+              _vm._v(" "),
+              _c("the-mask", {
+                attrs: {
+                  mask: ["(###) ###-####"],
+                  masked: "",
+                  placeholder: "Phone"
+                },
+                model: {
+                  value: _vm.teacher.phone,
+                  callback: function($$v) {
+                    _vm.$set(_vm.teacher, "phone", $$v)
+                  },
+                  expression: "teacher.phone"
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic primary button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "school-info" })
+            }
+          }
+        },
+        [
+          _c("i", { staticClass: "left chevron icon" }),
+          _vm._v("\n    Back\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic black button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "home" })
+            }
+          }
+        },
+        [
+          _c("i", { staticClass: "refresh icon" }),
+          _vm._v("\n    Start Over\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "sui-button",
+        {
+          attrs: { primary: "", size: "huge", disabled: !_vm.isValid },
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "review" })
+            }
+          }
+        },
+        [
+          _vm._v("\n    Review\n    "),
+          _c("i", { staticClass: "right chevron icon" })
+        ]
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ui center aligned huge header" }, [
+      _c(
+        "div",
+        {
+          staticClass: "content",
+          staticStyle: { "text-align": "center !important" }
+        },
+        [
+          _vm._v("\n      Teacher Info\n      "),
+          _c("div", { staticClass: "sub header" }, [
+            _vm._v("\n        We need your information\n      ")
+          ])
+        ]
+      )
+    ])
+  }
+]
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$2926fb', $2926fb);
+          } else {
+            api.reload('$2926fb', $2926fb);
+          }
+        }
+
+        
+      }
+    })();
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/routes.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52413,6 +52716,8 @@ var _Shows = _interopRequireDefault(require("./components/Shows.vue"));
 var _PostShow = _interopRequireDefault(require("./components/PostShow.vue"));
 
 var _SchoolInfo = _interopRequireDefault(require("./components/SchoolInfo.vue"));
+
+var _TeacherInfo = _interopRequireDefault(require("./components/TeacherInfo.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52460,10 +52765,17 @@ var _default = {
     meta: {
       step: 6
     }
+  }, {
+    path: '/teacher-info',
+    name: 'teacher-info',
+    component: _TeacherInfo.default,
+    meta: {
+      step: 7
+    }
   }]
 };
 exports.default = _default;
-},{"./components/Home.vue":"src/components/Home.vue","./components/Attendance.vue":"src/components/Attendance.vue","./components/Dates.vue":"src/components/Dates.vue","./components/Shows.vue":"src/components/Shows.vue","./components/PostShow.vue":"src/components/PostShow.vue","./components/SchoolInfo.vue":"src/components/SchoolInfo.vue"}],"src/modules.js":[function(require,module,exports) {
+},{"./components/Home.vue":"src/components/Home.vue","./components/Attendance.vue":"src/components/Attendance.vue","./components/Dates.vue":"src/components/Dates.vue","./components/Shows.vue":"src/components/Shows.vue","./components/PostShow.vue":"src/components/PostShow.vue","./components/SchoolInfo.vue":"src/components/SchoolInfo.vue","./components/TeacherInfo.vue":"src/components/TeacherInfo.vue"}],"src/modules.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52498,6 +52810,12 @@ var _default = {
       city: '',
       state: 'Texas',
       zip: '',
+      phone: ''
+    },
+    teacher: {
+      first_name: '',
+      last_name: '',
+      email: '',
       phone: ''
     },
     special_needs: false,
@@ -52589,6 +52907,12 @@ var _default = {
     SET_NEW_ORGANIZATION(state, payload) {
       Object.assign(state, {
         new_organization: payload
+      });
+    },
+
+    SET_TEACHER(state, payload) {
+      Object.assign(state, {
+        teacher: payload
       });
     }
 
@@ -53727,7 +54051,10 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_20__;
 /******/ ]);
 });
 //# sourceMappingURL=index.js.map
-},{"vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/main.js":[function(require,module,exports) {
+},{"vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/vue-the-mask/dist/vue-the-mask.js":[function(require,module,exports) {
+var define;
+(function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.VueTheMask=t():e.VueTheMask=t()})(this,function(){return function(e){function t(r){if(n[r])return n[r].exports;var a=n[r]={i:r,l:!1,exports:{}};return e[r].call(a.exports,a,a.exports,t),a.l=!0,a.exports}var n={};return t.m=e,t.c=n,t.i=function(e){return e},t.d=function(e,n,r){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:r})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p=".",t(t.s=10)}([function(e,t){e.exports={"#":{pattern:/\d/},X:{pattern:/[0-9a-zA-Z]/},S:{pattern:/[a-zA-Z]/},A:{pattern:/[a-zA-Z]/,transform:function(e){return e.toLocaleUpperCase()}},a:{pattern:/[a-zA-Z]/,transform:function(e){return e.toLocaleLowerCase()}},"!":{escape:!0}}},function(e,t,n){"use strict";function r(e){var t=document.createEvent("Event");return t.initEvent(e,!0,!0),t}var a=n(2),o=n(0),i=n.n(o);t.a=function(e,t){var o=t.value;if((Array.isArray(o)||"string"==typeof o)&&(o={mask:o,tokens:i.a}),"INPUT"!==e.tagName.toLocaleUpperCase()){var u=e.getElementsByTagName("input");if(1!==u.length)throw new Error("v-mask directive requires 1 input, found "+u.length);e=u[0]}e.oninput=function(t){if(t.isTrusted){var i=e.selectionEnd,u=e.value[i-1];for(e.value=n.i(a.a)(e.value,o.mask,!0,o.tokens);i<e.value.length&&e.value.charAt(i-1)!==u;)i++;e===document.activeElement&&(e.setSelectionRange(i,i),setTimeout(function(){e.setSelectionRange(i,i)},0)),e.dispatchEvent(r("input"))}};var s=n.i(a.a)(e.value,o.mask,!0,o.tokens);s!==e.value&&(e.value=s,e.dispatchEvent(r("input")))}},function(e,t,n){"use strict";var r=n(6),a=n(5);t.a=function(e,t){var o=!(arguments.length>2&&void 0!==arguments[2])||arguments[2],i=arguments[3];return Array.isArray(t)?n.i(a.a)(r.a,t,i)(e,t,o,i):n.i(r.a)(e,t,o,i)}},function(e,t,n){"use strict";function r(e){e.component(s.a.name,s.a),e.directive("mask",i.a)}Object.defineProperty(t,"__esModule",{value:!0});var a=n(0),o=n.n(a),i=n(1),u=n(7),s=n.n(u);n.d(t,"TheMask",function(){return s.a}),n.d(t,"mask",function(){return i.a}),n.d(t,"tokens",function(){return o.a}),n.d(t,"version",function(){return c});var c="0.11.1";t.default=r,"undefined"!=typeof window&&window.Vue&&window.Vue.use(r)},function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var r=n(1),a=n(0),o=n.n(a),i=n(2);t.default={name:"TheMask",props:{value:[String,Number],mask:{type:[String,Array],required:!0},masked:{type:Boolean,default:!1},tokens:{type:Object,default:function(){return o.a}}},directives:{mask:r.a},data:function(){return{lastValue:null,display:this.value}},watch:{value:function(e){e!==this.lastValue&&(this.display=e)},masked:function(){this.refresh(this.display)}},computed:{config:function(){return{mask:this.mask,tokens:this.tokens,masked:this.masked}}},methods:{onInput:function(e){e.isTrusted||this.refresh(e.target.value)},refresh:function(e){this.display=e;var e=n.i(i.a)(e,this.mask,this.masked,this.tokens);e!==this.lastValue&&(this.lastValue=e,this.$emit("input",e))}}}},function(e,t,n){"use strict";function r(e,t,n){return t=t.sort(function(e,t){return e.length-t.length}),function(r,a){for(var o=!(arguments.length>2&&void 0!==arguments[2])||arguments[2],i=0;i<t.length;){var u=t[i];i++;var s=t[i];if(!(s&&e(r,s,!0,n).length>u.length))return e(r,u,o,n)}return""}}t.a=r},function(e,t,n){"use strict";function r(e,t){var n=!(arguments.length>2&&void 0!==arguments[2])||arguments[2],r=arguments[3];e=e||"",t=t||"";for(var a=0,o=0,i="";a<t.length&&o<e.length;){var u=t[a],s=r[u],c=e[o];s&&!s.escape?(s.pattern.test(c)&&(i+=s.transform?s.transform(c):c,a++),o++):(s&&s.escape&&(a++,u=t[a]),n&&(i+=u),c===u&&o++,a++)}for(var f="";a<t.length&&n;){var u=t[a];if(r[u]){f="";break}f+=u,a++}return i+f}t.a=r},function(e,t,n){var r=n(8)(n(4),n(9),null,null);e.exports=r.exports},function(e,t){e.exports=function(e,t,n,r){var a,o=e=e||{},i=typeof e.default;"object"!==i&&"function"!==i||(a=e,o=e.default);var u="function"==typeof o?o.options:o;if(t&&(u.render=t.render,u.staticRenderFns=t.staticRenderFns),n&&(u._scopeId=n),r){var s=u.computed||(u.computed={});Object.keys(r).forEach(function(e){var t=r[e];s[e]=function(){return t}})}return{esModule:a,exports:o,options:u}}},function(e,t){e.exports={render:function(){var e=this,t=e.$createElement;return(e._self._c||t)("input",{directives:[{name:"mask",rawName:"v-mask",value:e.config,expression:"config"}],attrs:{type:"text"},domProps:{value:e.display},on:{input:e.onInput}})},staticRenderFns:[]}},function(e,t,n){e.exports=n(3)}])});
+},{}],"src/main.js":[function(require,module,exports) {
 "use strict";
 
 var _vue = _interopRequireDefault(require("vue"));
@@ -53746,6 +54073,8 @@ var _modules = _interopRequireDefault(require("./modules"));
 
 var _vueNotification = _interopRequireDefault(require("vue-notification"));
 
+var _vueTheMask = _interopRequireDefault(require("vue-the-mask"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue.default.use(_semanticUiVue.default);
@@ -53756,6 +54085,8 @@ _vue.default.use(_vuex.default);
 
 _vue.default.use(_vueNotification.default);
 
+_vue.default.use(_vueTheMask.default);
+
 const router = new _vueRouter.default(_routes.default);
 const store = new _vuex.default.Store(_modules.default);
 new _vue.default({
@@ -53763,7 +54094,7 @@ new _vue.default({
   store,
   render: h => h(_App.default)
 }).$mount('#app');
-},{"vue":"node_modules/vue/dist/vue.runtime.esm.js","vue-router":"node_modules/vue-router/dist/vue-router.esm.js","vuex":"node_modules/vuex/dist/vuex.esm.js","semantic-ui-vue":"node_modules/semantic-ui-vue/dist/commonjs/index.js","./App":"src/App.vue","./routes":"src/routes.js","./modules":"src/modules.js","vue-notification":"node_modules/vue-notification/dist/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"vue":"node_modules/vue/dist/vue.runtime.esm.js","vue-router":"node_modules/vue-router/dist/vue-router.esm.js","vuex":"node_modules/vuex/dist/vuex.esm.js","semantic-ui-vue":"node_modules/semantic-ui-vue/dist/commonjs/index.js","./App":"src/App.vue","./routes":"src/routes.js","./modules":"src/modules.js","vue-notification":"node_modules/vue-notification/dist/index.js","vue-the-mask":"node_modules/vue-the-mask/dist/vue-the-mask.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -53791,7 +54122,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35033" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35563" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
