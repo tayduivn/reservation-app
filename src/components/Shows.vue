@@ -8,7 +8,7 @@
         <div class="ui dividing header">
           {{ format(new Date(time), "EEEE, MMMM d, yyyy 'at' hh:mm a") }}
         </div>
-        <sui-dropdown fluid :placeholder="`Select Show #${ i + 1 }`" search selection :options="available_shows" v-model="shows[i]"></sui-dropdown>
+        <sui-dropdown fluid :placeholder="`Select Show #${ i + 1 }`" search selection :options="available_shows" @input="handleShowChange" v-model="shows[i]"></sui-dropdown>
         <div class="ui segment">
           <div class="ui items">
             <div class="item" v-if="shows[i]">
@@ -74,12 +74,21 @@
     computed: {
       times() { return this.$store.state.times },
       shows: {
-        get() { return this.$store.state.shows },
-        set(value) { this.$store.commit('SET_SHOWS', value) }
+        get() { 
+          return this.$store.state.shows 
+        },
+        set(value) { 
+          this.$store.commit('SET_SHOWS', value) 
+        }
       }
     },
     methods: {
       format,
+      handleShowChange(event) {
+        const selected_shows = this.shows.map(show => this.getShow(show), this)
+        console.log(selected_shows)
+        this.$store.commit('SET_SELECTED_SHOWS', selected_shows)
+      },
       async fetchShows() {
         try {
           const response = await axios.get(`${SERVER}/api/public/shows`)

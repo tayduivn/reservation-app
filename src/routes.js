@@ -3,6 +3,7 @@ import Attendance from './components/Attendance.vue'
 import Dates      from './components/Dates.vue'
 import Shows      from './components/Shows.vue'
 import PostShow   from './components/PostShow.vue'
+import SchoolInfo from './components/SchoolInfo.vue'
 
 export default {
   mode : 'history',
@@ -36,6 +37,12 @@ export default {
       name     : 'post-show',
       component: PostShow,
       meta     : { step: 5 },
+    },
+    {
+      path     : '/school-info',
+      name     : 'school-info',
+      component: SchoolInfo,
+      meta     : { step: 6 },
     }
   ]
 }

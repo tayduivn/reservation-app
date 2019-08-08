@@ -14,7 +14,19 @@ export default {
     min_date: addDays(new Date(), 14),
     times: [],
     shows: [],
+    selected_shows: [],
     post_show: null,
+    organization: null,
+    new_organization: {
+      name         : '',
+      address      : '',
+      city         : '',
+      state        : 'Texas',
+      zip          : '',
+      phone        : '',
+    },
+    special_needs: false,
+    tax_exempt   : false,
   },
   mutations: {
     SET_ERRORS(state, payload) {
@@ -55,6 +67,15 @@ export default {
     },
     SET_POST_SHOW(state, payload) {
       Object.assign(state, { post_show: payload })
+    },
+    SET_SELECTED_SHOWS(state, payload) {
+      Object.assign(state, { selected_shows: payload })
+    },
+    SET_ORGANIZATION(state, payload) {
+      Object.assign(state, { organization: payload })
+    },
+    SET_NEW_ORGANIZATION(state, payload) {
+      Object.assign(state, { new_organization: payload })
     }
   },
   actions: {

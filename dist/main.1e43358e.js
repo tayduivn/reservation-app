@@ -32022,6 +32022,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
 var _default = {
   data: () => ({
     steps: [{
@@ -32080,6 +32082,14 @@ var _default = {
 
     attendance() {
       return this.$store.state.attendance;
+    },
+
+    selected_shows() {
+      return this.$store.state.selected_shows;
+    },
+
+    post_show() {
+      return this.$store.state.post_show;
     }
 
   },
@@ -32207,10 +32217,21 @@ exports.default = _default;
               _vm._s(
                 _vm.format(new Date(time), "EEEE, MMMM d, yyyy 'at' hh:mm a")
               ) +
-              "\n  "
-          )
+              "\n    "
+          ),
+          _vm.selected_shows[i]
+            ? _c("div", { staticClass: "detail" }, [
+                _vm._v(_vm._s(_vm.selected_shows[i].name))
+              ])
+            : _vm._e()
         ])
       }),
+      _vm._v(" "),
+      _vm.post_show
+        ? _c("div", { staticClass: "ui basic large blue label" }, [
+            _vm._v(_vm._s(_vm.post_show))
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "ui grid container" }, [
         _c(
@@ -51395,6 +51416,12 @@ var _default = {
   methods: {
     format: _format.default,
 
+    handleShowChange(event) {
+      const selected_shows = this.shows.map(show => this.getShow(show), this);
+      console.log(selected_shows);
+      this.$store.commit('SET_SELECTED_SHOWS', selected_shows);
+    },
+
     async fetchShows() {
       try {
         const response = await _axios.default.get(`${SERVER}/api/public/shows`);
@@ -51468,6 +51495,7 @@ exports.default = _default;
                   selection: "",
                   options: _vm.available_shows
                 },
+                on: { input: _vm.handleShowChange },
                 model: {
                   value: _vm.shows[i],
                   callback: function($$v) {
@@ -51909,6 +51937,463 @@ render._withStripped = true
         
       }
     })();
+},{"axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/SchoolInfo.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _axios = _interopRequireDefault(require("axios"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  data: () => ({
+    organizations: []
+  }),
+
+  async created() {
+    await this.fetchOrganizations();
+  },
+
+  computed: {
+    organization: {
+      set(value) {
+        this.$store.commit('SET_ORGANIZATION', value);
+      },
+
+      get() {
+        return this.$store.state.organization;
+      }
+
+    },
+    new_organization: {
+      set(value) {
+        this.$store.commit('SET_NEW_ORGANIZATION', value);
+      },
+
+      get() {
+        return this.$store.state.new_organization;
+      }
+
+    },
+
+    isValid() {
+      return this.new_organization.name.length > 2 && this.new_organization.address.length > 2;
+    }
+
+  },
+  methods: {
+    async fetchOrganizations() {
+      try {
+        const response = await _axios.default.get(`${SERVER}/api/organizations`);
+        const no_school = {
+          text: 'My school is not on the list',
+          value: 0,
+          key: 0
+        };
+        let organizations = response.data.map(organization => ({
+          text: organization.name,
+          value: organization.id,
+          key: organization.id
+        }));
+        organizations.push(no_school);
+        Object.assign(this, {
+          organizations
+        });
+      } catch (error) {
+        this.$store.commit('SET_ERRORS', error.message);
+      }
+    }
+
+  }
+};
+exports.default = _default;
+        var $96e8e0 = exports.default || module.exports;
+      
+      if (typeof $96e8e0 === 'function') {
+        $96e8e0 = $96e8e0.options;
+      }
+    
+        /* template */
+        Object.assign($96e8e0, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "ui basic center aligned segment" },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("sui-dropdown", {
+        attrs: {
+          fluid: "",
+          search: "",
+          selection: "",
+          options: _vm.organizations,
+          placeholder:
+            "Type and select the name of your school or select the last option if you can't find it"
+        },
+        model: {
+          value: _vm.organization,
+          callback: function($$v) {
+            _vm.organization = $$v
+          },
+          expression: "organization"
+        }
+      }),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.organization == 0,
+              expression: "organization == 0"
+            }
+          ],
+          staticClass: "ui form"
+        },
+        [
+          _c("div", { staticClass: "two fields" }, [
+            _c("div", { staticClass: "field" }, [
+              _c("label", [_vm._v("School Name")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.new_organization.name,
+                    expression: "new_organization.name"
+                  }
+                ],
+                attrs: {
+                  type: "text",
+                  placeholder: "School Name (do not abbreviate)"
+                },
+                domProps: { value: _vm.new_organization.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.new_organization, "name", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "field" }, [
+              _c("label", [_vm._v("School Address")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.new_organization.address,
+                    expression: "new_organization.address"
+                  }
+                ],
+                attrs: { placeholder: "School Address", type: "text" },
+                domProps: { value: _vm.new_organization.address },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.new_organization,
+                      "address",
+                      $event.target.value
+                    )
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "two fields" }, [
+            _c("div", { staticClass: "field" }, [
+              _c("label", [_vm._v("City")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.new_organization.city,
+                    expression: "new_organization.city"
+                  }
+                ],
+                attrs: { placeholder: "City", type: "text" },
+                domProps: { value: _vm.new_organization.city },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.new_organization, "city", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "field" }, [
+              _c("label", [_vm._v("State")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.new_organization.state,
+                    expression: "new_organization.state"
+                  }
+                ],
+                attrs: { type: "text", readonly: "" },
+                domProps: { value: _vm.new_organization.state },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.new_organization, "state", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "two fields" }, [
+            _c("div", { staticClass: "field" }, [
+              _c("label", [_vm._v("ZIP")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.new_organization.zip,
+                    expression: "new_organization.zip"
+                  }
+                ],
+                attrs: { type: "text", placeholder: "ZIP" },
+                domProps: { value: _vm.new_organization.zip },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.new_organization, "zip", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "field" }, [
+              _c("label", [_vm._v("Phone")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.new_organization.phone,
+                    expression: "new_organization.phone"
+                  }
+                ],
+                attrs: { type: "text", placeholder: "Phone" },
+                domProps: { value: _vm.new_organization.phone },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.new_organization, "phone", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("br"),
+      _c("br"),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic primary button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "post-show" })
+            }
+          }
+        },
+        [
+          _c("i", { staticClass: "left chevron icon" }),
+          _vm._v("\n    Back\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic black button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "home" })
+            }
+          }
+        },
+        [
+          _c("i", { staticClass: "refresh icon" }),
+          _vm._v("\n    Start Over\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "sui-button",
+        {
+          attrs: { primary: "", size: "huge", disabled: !_vm.isValid },
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "teacher-info" })
+            }
+          }
+        },
+        [
+          _vm._v("\n    Next\n    "),
+          _c("i", { staticClass: "right chevron icon" })
+        ]
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ui center aligned huge header" }, [
+      _c(
+        "div",
+        {
+          staticClass: "content",
+          staticStyle: { "text-align": "center !important" }
+        },
+        [
+          _vm._v("\n      School Info\n      "),
+          _c("div", { staticClass: "sub header" }, [
+            _vm._v("\n        Find your school in the dropdown below\n      ")
+          ])
+        ]
+      )
+    ])
+  }
+]
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$96e8e0', $96e8e0);
+          } else {
+            api.reload('$96e8e0', $96e8e0);
+          }
+        }
+
+        
+      }
+    })();
 },{"axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/routes.js":[function(require,module,exports) {
 "use strict";
 
@@ -51926,6 +52411,8 @@ var _Dates = _interopRequireDefault(require("./components/Dates.vue"));
 var _Shows = _interopRequireDefault(require("./components/Shows.vue"));
 
 var _PostShow = _interopRequireDefault(require("./components/PostShow.vue"));
+
+var _SchoolInfo = _interopRequireDefault(require("./components/SchoolInfo.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51966,10 +52453,17 @@ var _default = {
     meta: {
       step: 5
     }
+  }, {
+    path: '/school-info',
+    name: 'school-info',
+    component: _SchoolInfo.default,
+    meta: {
+      step: 6
+    }
   }]
 };
 exports.default = _default;
-},{"./components/Home.vue":"src/components/Home.vue","./components/Attendance.vue":"src/components/Attendance.vue","./components/Dates.vue":"src/components/Dates.vue","./components/Shows.vue":"src/components/Shows.vue","./components/PostShow.vue":"src/components/PostShow.vue"}],"src/modules.js":[function(require,module,exports) {
+},{"./components/Home.vue":"src/components/Home.vue","./components/Attendance.vue":"src/components/Attendance.vue","./components/Dates.vue":"src/components/Dates.vue","./components/Shows.vue":"src/components/Shows.vue","./components/PostShow.vue":"src/components/PostShow.vue","./components/SchoolInfo.vue":"src/components/SchoolInfo.vue"}],"src/modules.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51995,7 +52489,19 @@ var _default = {
     min_date: (0, _addDays.default)(new Date(), 14),
     times: [],
     shows: [],
-    post_show: null
+    selected_shows: [],
+    post_show: null,
+    organization: null,
+    new_organization: {
+      name: '',
+      address: '',
+      city: '',
+      state: 'Texas',
+      zip: '',
+      phone: ''
+    },
+    special_needs: false,
+    tax_exempt: false
   },
   mutations: {
     SET_ERRORS(state, payload) {
@@ -52065,6 +52571,24 @@ var _default = {
     SET_POST_SHOW(state, payload) {
       Object.assign(state, {
         post_show: payload
+      });
+    },
+
+    SET_SELECTED_SHOWS(state, payload) {
+      Object.assign(state, {
+        selected_shows: payload
+      });
+    },
+
+    SET_ORGANIZATION(state, payload) {
+      Object.assign(state, {
+        organization: payload
+      });
+    },
+
+    SET_NEW_ORGANIZATION(state, payload) {
+      Object.assign(state, {
+        new_organization: payload
       });
     }
 
@@ -53267,7 +53791,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43455" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35033" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

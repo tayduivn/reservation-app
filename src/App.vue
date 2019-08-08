@@ -22,7 +22,9 @@
     <div class="ui basic large blue label" v-for="(time, i) in times" :key="i">
       <div class="detail" style="margin-left:0">#{{ i + 1 }}</div>
       {{ format(new Date(time), "EEEE, MMMM d, yyyy 'at' hh:mm a") }}
+      <div class="detail" v-if="selected_shows[i]">{{ selected_shows[i].name }}</div>
     </div>
+    <div class="ui basic large blue label" v-if="post_show">{{ post_show }}</div>
     
     <div class="ui grid container">
       <div class="sixteen wide column">
@@ -108,6 +110,8 @@
       errors() { return this.$store.state.errors },
       times() { return this.$store.state.times },
       attendance() { return this.$store.state.attendance },
+      selected_shows() { return this.$store.state.selected_shows },
+      post_show() { return this.$store.state.post_show }
     },
     methods: {
       format,
