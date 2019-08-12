@@ -86,7 +86,6 @@
       format,
       handleShowChange(event) {
         const selected_shows = this.shows.map(show => this.getShow(show), this)
-        console.log(selected_shows)
         this.$store.commit('SET_SELECTED_SHOWS', selected_shows)
       },
       async fetchShows() {

@@ -5,6 +5,8 @@ import Shows       from './components/Shows.vue'
 import PostShow    from './components/PostShow.vue'
 import SchoolInfo  from './components/SchoolInfo.vue'
 import TeacherInfo from './components/TeacherInfo.vue'
+import Review      from './components/Review.vue'
+import ThankYou    from './components/ThankYou.vue'
 
 export default {
   mode : 'history',
@@ -50,6 +52,18 @@ export default {
       name      : 'teacher-info',
       component : TeacherInfo,
       meta      : { step: 7 },
-    }
+    },
+    {
+      path      : '/review',
+      name      : 'review',
+      component : Review,
+      meta      : { step: 8 },
+    },
+    {
+      path      : '/thank-you',
+      name      : 'thank-you',
+      component : ThankYou,
+      meta      : { step: 9 },
+    },
   ]
 }

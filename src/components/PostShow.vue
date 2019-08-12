@@ -10,9 +10,9 @@
       </div>
     </div>
     <div class="ui centered cards">
-      <div class="card" v-for="product in products" :key="product.id" @click="post_show = product.name">
+      <div class="card" v-for="product in products" :key="product.id" @click="post_show = product">
         <div class="image">
-          <div class="ui blue right corner label" v-if="post_show == product.name">
+          <div class="ui blue right corner label" v-if=" post_show != null && post_show.name == product.name">
             <i class="heart icon"></i>
           </div>
           <img :src="product.cover" alt="">

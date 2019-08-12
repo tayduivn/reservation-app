@@ -51,10 +51,16 @@
     data: () => ({
       
     }),
+    watch: {
+      teacher: {
+        deep: true,
+        handler: function(value) { this.$store.commit('SET_TEACHER', this.teacher) }
+      }
+    },
     computed: {
       teacher: {
         get() { return this.$store.state.teacher },
-        set(value) { this.$store.commit('SET_TEACHER', payload) }
+        set(value) { this.$store.commit('SET_TEACHER', value) }
       },
       isValid() {
         return this.teacher.first_name.length > 1 &&

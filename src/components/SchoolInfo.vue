@@ -98,7 +98,9 @@
         try {
           const response = await axios.get(`${SERVER}/api/organizations`)
           const no_school = { text: 'My school is not on the list', value: 0, key: 0 }
-          let organizations = response.data.map(organization => ({ text: organization.name, value: organization.id, key: organization.id }))
+          let organizations = response.data.map(organization => ({ 
+            text: organization.name, value: { id: organization.id, name: organization.name, type: organization.type.name }, key: organization.id 
+          }))
           organizations.push(no_school)
           Object.assign(this, { organizations } )
         } catch (error) {

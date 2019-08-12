@@ -32024,6 +32024,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
 var _default = {
   data: () => ({
     steps: [{
@@ -32162,76 +32164,76 @@ exports.default = _default;
             {
               name: "show",
               rawName: "v-show",
-              value: _vm.$route.name != "home",
-              expression: "$route.name != 'home'"
+              value:
+                _vm.$route.name != "home" &&
+                _vm.$route.name != "review" &&
+                _vm.$route.name != "thank-you",
+              expression:
+                "$route.name != 'home' && $route.name != 'review' && $route.name != 'thank-you' "
             }
-          ],
-          staticClass: "ui basic large blue label"
+          ]
         },
-        [_vm._v("\n    " + _vm._s(_vm.attendance.students) + " students\n  ")]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.$route.name != "home",
-              expression: "$route.name != 'home'"
-            }
-          ],
-          staticClass: "ui basic large blue label"
-        },
-        [_vm._v("\n    " + _vm._s(_vm.attendance.teachers) + " teachers\n  ")]
-      ),
-      _vm._v(" "),
-      _vm.attendance.parents > 0
-        ? _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.$route.name != "home",
-                  expression: "$route.name != 'home'"
-                }
-              ],
-              staticClass: "ui basic large blue label"
-            },
-            [_vm._v("\n    " + _vm._s(_vm.attendance.parents) + " parents\n  ")]
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _vm._l(_vm.times, function(time, i) {
-        return _c("div", { key: i, staticClass: "ui basic large blue label" }, [
-          _c(
-            "div",
-            { staticClass: "detail", staticStyle: { "margin-left": "0" } },
-            [_vm._v("#" + _vm._s(i + 1))]
-          ),
-          _vm._v(
-            "\n    " +
-              _vm._s(
-                _vm.format(new Date(time), "EEEE, MMMM d, yyyy 'at' hh:mm a")
-              ) +
-              "\n    "
-          ),
-          _vm.selected_shows[i]
-            ? _c("div", { staticClass: "detail" }, [
-                _vm._v(_vm._s(_vm.selected_shows[i].name))
+        [
+          _c("div", { staticClass: "ui basic large blue label" }, [
+            _vm._v(
+              "\n      " + _vm._s(_vm.attendance.students) + " students\n    "
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "ui basic large blue label" }, [
+            _vm._v(
+              "\n      " + _vm._s(_vm.attendance.teachers) + " teachers\n    "
+            )
+          ]),
+          _vm._v(" "),
+          _vm.attendance.parents > 0
+            ? _c("div", { staticClass: "ui basic large blue label" }, [
+                _vm._v(
+                  "\n      " + _vm._s(_vm.attendance.parents) + " parents\n    "
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm._l(_vm.times, function(time, i) {
+            return _c(
+              "div",
+              { key: i, staticClass: "ui basic large blue label" },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass: "detail",
+                    staticStyle: { "margin-left": "0" }
+                  },
+                  [_vm._v("#" + _vm._s(i + 1))]
+                ),
+                _vm._v(
+                  "\n      " +
+                    _vm._s(
+                      _vm.format(
+                        new Date(time),
+                        "EEEE, MMMM d, yyyy 'at' hh:mm a"
+                      )
+                    ) +
+                    "\n      "
+                ),
+                _vm.selected_shows[i]
+                  ? _c("div", { staticClass: "detail" }, [
+                      _vm._v(_vm._s(_vm.selected_shows[i].name))
+                    ])
+                  : _vm._e()
+              ]
+            )
+          }),
+          _vm._v(" "),
+          _vm.post_show
+            ? _c("div", { staticClass: "ui basic large blue label" }, [
+                _vm._v(_vm._s(_vm.post_show.name))
               ])
             : _vm._e()
-        ])
-      }),
-      _vm._v(" "),
-      _vm.post_show
-        ? _c("div", { staticClass: "ui basic large blue label" }, [
-            _vm._v(_vm._s(_vm.post_show))
-          ])
-        : _vm._e(),
+        ],
+        2
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "ui grid container" }, [
         _c(
@@ -32273,7 +32275,7 @@ exports.default = _default;
         )
       ])
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -51418,7 +51420,6 @@ var _default = {
 
     handleShowChange(event) {
       const selected_shows = this.shows.map(show => this.getShow(show), this);
-      console.log(selected_shows);
       this.$store.commit('SET_SELECTED_SHOWS', selected_shows);
     },
 
@@ -51820,13 +51821,13 @@ exports.default = _default;
               staticClass: "card",
               on: {
                 click: function($event) {
-                  _vm.post_show = product.name
+                  _vm.post_show = product
                 }
               }
             },
             [
               _c("div", { staticClass: "image" }, [
-                _vm.post_show == product.name
+                _vm.post_show != null && _vm.post_show.name == product.name
                   ? _c("div", { staticClass: "ui blue right corner label" }, [
                       _c("i", { staticClass: "heart icon" })
                     ])
@@ -52058,7 +52059,11 @@ var _default = {
         };
         let organizations = response.data.map(organization => ({
           text: organization.name,
-          value: organization.id,
+          value: {
+            id: organization.id,
+            name: organization.name,
+            type: organization.type.name
+          },
           key: organization.id
         }));
         organizations.push(no_school);
@@ -52451,6 +52456,14 @@ exports.default = void 0;
 //
 var _default = {
   data: () => ({}),
+  watch: {
+    teacher: {
+      deep: true,
+      handler: function (value) {
+        this.$store.commit('SET_TEACHER', this.teacher);
+      }
+    }
+  },
   computed: {
     teacher: {
       get() {
@@ -52458,7 +52471,7 @@ var _default = {
       },
 
       set(value) {
-        this.$store.commit('SET_TEACHER', payload);
+        this.$store.commit('SET_TEACHER', value);
       }
 
     },
@@ -52697,6 +52710,497 @@ render._withStripped = true
         
       }
     })();
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/Review.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _format = _interopRequireDefault(require("date-fns/format"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  computed: {
+    selected_shows() {
+      return this.$store.state.selected_shows;
+    },
+
+    attendance() {
+      return this.$store.state.attendance;
+    },
+
+    organization() {
+      return this.$store.state.organization;
+    },
+
+    new_organization() {
+      return this.$store.state.new_organization;
+    },
+
+    teacher() {
+      return this.$store.state.teacher;
+    },
+
+    post_show() {
+      return this.$store.state.post_show;
+    }
+
+  },
+  methods: {
+    format: _format.default,
+
+    handleSubmit() {
+      // submit data
+      // go to thank you page
+      this.$router.push({
+        name: 'thank-you'
+      });
+    }
+
+  }
+};
+exports.default = _default;
+        var $fb9bd0 = exports.default || module.exports;
+      
+      if (typeof $fb9bd0 === 'function') {
+        $fb9bd0 = $fb9bd0.options;
+      }
+    
+        /* template */
+        Object.assign($fb9bd0, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "ui basic center aligned segment" },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "ui basic segment" }, [
+        _c(
+          "div",
+          { staticClass: "ui items" },
+          [
+            _vm.organization
+              ? _c("div", { staticClass: "item" }, [
+                  _c("div", { staticClass: "content" }, [
+                    _c("div", { staticClass: "header" }, [
+                      _vm._v(_vm._s(_vm.organization.name) + " "),
+                      _c("div", { staticClass: "ui black label" }, [
+                        _vm._v(_vm._s(_vm.organization.type))
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "meta" }, [_vm._v("Organization")])
+                  ])
+                ])
+              : _c("div", { staticClass: "item" }, [
+                  _c("div", { staticClass: "content" }, [
+                    _c("div", { staticClass: "header" }, [
+                      _vm._v(_vm._s(_vm.new_organization.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "meta" }, [_vm._v("Organization")])
+                  ])
+                ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "item" }, [
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "header" }, [
+                  _vm._v(
+                    _vm._s(_vm.teacher.first_name) +
+                      " " +
+                      _vm._s(_vm.teacher.last_name)
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "meta" }, [_vm._v("Group Leader")])
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.selected_shows, function(show) {
+              return _c("div", { key: show.id, staticClass: "item" }, [
+                _c("div", { staticClass: "image" }, [
+                  _c("img", { attrs: { src: show.cover } })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "content" }, [
+                  _c("div", { staticClass: "header" }, [
+                    _vm._v(_vm._s(show.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "meta" }, [
+                    _c("div", { staticClass: "ui black label" }, [
+                      _vm._v(_vm._s(show.type))
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "ui black label" }, [
+                      _vm._v(_vm._s(show.duration) + " minutes")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "meta" }, [
+                    _c("div", { staticClass: "ui basic blue label" }, [
+                      _vm._v(
+                        "\n              " +
+                          _vm._s(_vm.attendance.students) +
+                          " students\n            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "ui basic blue label" }, [
+                      _vm._v(
+                        "\n              " +
+                          _vm._s(_vm.attendance.teachers) +
+                          " teachers\n            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm.attendance.parents > 0
+                      ? _c(
+                          "div",
+                          { staticClass: "ui basic large blue label" },
+                          [
+                            _vm._v(
+                              "\n              " +
+                                _vm._s(_vm.attendance.parents) +
+                                " parents\n            "
+                            )
+                          ]
+                        )
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "description" }, [
+                    _c("p", [_vm._v(_vm._s(show.description))])
+                  ])
+                ])
+              ])
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "item" }, [
+              _c("div", { staticClass: "image" }, [
+                _c("img", { attrs: { src: _vm.post_show.cover } })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "content" }, [
+                _c("div", { staticClass: "header" }, [
+                  _vm._v(_vm._s(_vm.post_show.name))
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "meta" }, [
+                  _vm._v(_vm._s(_vm.post_show.description))
+                ])
+              ])
+            ])
+          ],
+          2
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic primary button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "teacher-info" })
+            }
+          }
+        },
+        [
+          _c("i", { staticClass: "left chevron icon" }),
+          _vm._v("\n    Back\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "ui huge basic black button",
+          on: {
+            click: function($event) {
+              return _vm.$router.push({ name: "home" })
+            }
+          }
+        },
+        [
+          _c("i", { staticClass: "refresh icon" }),
+          _vm._v("\n    Start Over\n  ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "sui-button",
+        {
+          attrs: { color: "green", size: "huge" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.handleSubmit($event)
+            }
+          }
+        },
+        [_c("i", { staticClass: "check icon" }), _vm._v("\n    Submit\n  ")]
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "ui center aligned huge header" }, [
+      _c(
+        "div",
+        {
+          staticClass: "content",
+          staticStyle: { "text-align": "center !important" }
+        },
+        [
+          _vm._v("\n      Review\n      "),
+          _c("div", { staticClass: "sub header" }, [
+            _vm._v("\n        Make sure we've got everything right\n      ")
+          ])
+        ]
+      )
+    ])
+  }
+]
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$fb9bd0', $fb9bd0);
+          } else {
+            api.reload('$fb9bd0', $fb9bd0);
+          }
+        }
+
+        
+      }
+    })();
+},{"date-fns/format":"node_modules/date-fns/esm/format/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/ThankYou.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = {
+  computed: {
+    organization() {
+      return this.$store.state.organization;
+    },
+
+    teacher() {
+      return this.$store.state.teacher;
+    }
+
+  }
+};
+exports.default = _default;
+        var $ccba9c = exports.default || module.exports;
+      
+      if (typeof $ccba9c === 'function') {
+        $ccba9c = $ccba9c.options;
+      }
+    
+        /* template */
+        Object.assign($ccba9c, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "ui basic center aligned segment" }, [
+    _c("i", { staticClass: "massive thumbs up green icon" }),
+    _vm._v(" "),
+    _c("div", { staticClass: "ui center aligned huge header" }, [
+      _c(
+        "div",
+        {
+          staticClass: "content",
+          staticStyle: { "text-align": "center !important" }
+        },
+        [
+          _vm._v(
+            "\n      We got it, " + _vm._s(_vm.teacher.first_name) + "!\n      "
+          ),
+          _c("div", { staticClass: "sub header" }, [
+            _vm._v(
+              "\n        We will contact you about your reservation within the next two business days. If we don't, \n        email planetarium@ctcd.edu or call 254-526-1768.\n      "
+            )
+          ])
+        ]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "ui huge basic black button",
+        on: {
+          click: function($event) {
+            return _vm.$router.push({ name: "home" })
+          }
+        }
+      },
+      [_c("i", { staticClass: "refresh icon" }), _vm._v("\n    Start Over\n  ")]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$ccba9c', $ccba9c);
+          } else {
+            api.reload('$ccba9c', $ccba9c);
+          }
+        }
+
+        
+      }
+    })();
 },{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/routes.js":[function(require,module,exports) {
 "use strict";
 
@@ -52718,6 +53222,10 @@ var _PostShow = _interopRequireDefault(require("./components/PostShow.vue"));
 var _SchoolInfo = _interopRequireDefault(require("./components/SchoolInfo.vue"));
 
 var _TeacherInfo = _interopRequireDefault(require("./components/TeacherInfo.vue"));
+
+var _Review = _interopRequireDefault(require("./components/Review.vue"));
+
+var _ThankYou = _interopRequireDefault(require("./components/ThankYou.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52772,10 +53280,24 @@ var _default = {
     meta: {
       step: 7
     }
+  }, {
+    path: '/review',
+    name: 'review',
+    component: _Review.default,
+    meta: {
+      step: 8
+    }
+  }, {
+    path: '/thank-you',
+    name: 'thank-you',
+    component: _ThankYou.default,
+    meta: {
+      step: 9
+    }
   }]
 };
 exports.default = _default;
-},{"./components/Home.vue":"src/components/Home.vue","./components/Attendance.vue":"src/components/Attendance.vue","./components/Dates.vue":"src/components/Dates.vue","./components/Shows.vue":"src/components/Shows.vue","./components/PostShow.vue":"src/components/PostShow.vue","./components/SchoolInfo.vue":"src/components/SchoolInfo.vue","./components/TeacherInfo.vue":"src/components/TeacherInfo.vue"}],"src/modules.js":[function(require,module,exports) {
+},{"./components/Home.vue":"src/components/Home.vue","./components/Attendance.vue":"src/components/Attendance.vue","./components/Dates.vue":"src/components/Dates.vue","./components/Shows.vue":"src/components/Shows.vue","./components/PostShow.vue":"src/components/PostShow.vue","./components/SchoolInfo.vue":"src/components/SchoolInfo.vue","./components/TeacherInfo.vue":"src/components/TeacherInfo.vue","./components/Review.vue":"src/components/Review.vue","./components/ThankYou.vue":"src/components/ThankYou.vue"}],"src/modules.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52801,6 +53323,7 @@ var _default = {
     min_date: (0, _addDays.default)(new Date(), 14),
     times: [],
     shows: [],
+    show_data: [],
     selected_shows: [],
     post_show: null,
     organization: null,
@@ -52914,6 +53437,10 @@ var _default = {
       Object.assign(state, {
         teacher: payload
       });
+    },
+
+    SET_SHOW_DATA(state, payload) {
+      state.show_data.splice(0, payload.index, payload.show);
     }
 
   },
@@ -54122,7 +54649,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35563" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46031" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

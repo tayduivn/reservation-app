@@ -14,6 +14,7 @@ export default {
     min_date: addDays(new Date(), 14),
     times: [],
     shows: [],
+    show_data: [],
     selected_shows: [],
     post_show: null,
     organization: null,
@@ -86,6 +87,9 @@ export default {
     SET_TEACHER(state, payload) {
       Object.assign(state, { teacher: payload })
     },
+    SET_SHOW_DATA(state, payload) {
+      state.show_data.splice(0, payload.index, payload.show)
+    }
   },
   actions: {
     
