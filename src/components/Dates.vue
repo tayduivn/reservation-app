@@ -87,7 +87,7 @@
 <script>
   
   import axios from 'axios'
-  import { format, startOfDay, endOfDay, addHours } from 'date-fns'
+  import { format, startOfDay, endOfDay, addHours, areIntervalsOverlapping } from 'date-fns'
   import flatpickr from 'vue-flatpickr-component'
   import 'flatpickr/dist/flatpickr.css'
 
@@ -159,9 +159,15 @@
           mockEvents.forEach(mockEvent => {
             let isTaken = false
             scheduledEvents.forEach(scheduledEvent => {
+              const scheduledEventInterval = { start: new Date(scheduledEvent.start), end: new Date(scheduledEvent.end) }
+              const mockEventInterval = { start: new Date(mockEvent.start), end: new Date(mockEvent.end) }
+              // If events have the same starting date they will be marked as taken
               if (new Date(scheduledEvent.start).toISOString() === new Date(mockEvent.start).toISOString()) {
                 isTaken = true
                 filteredSchedule.push(scheduledEvent)
+              }
+              else if (areIntervalsOverlapping(scheduledEventInterval, mockEventInterval)) {
+                Object.assign(mockEvent, { title: 'Not Available' })
               }
             })
             if (!isTaken)

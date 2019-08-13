@@ -9,62 +9,95 @@
       </div>
     </div>
     <div class="ui basic segment">
-      <div class="ui items">
-        <div class="item" v-if="organization">
-          <div class="content">
-            <div class="header">{{ organization.name }} <div class="ui black label">{{ organization.type }}</div></div>
-            <div class="meta">Organization</div>
-          </div>
-        </div>
-        <div class="item" v-else>
-          <div class="content">
-            <div class="header">{{ new_organization.name }}</div>
-            <div class="meta">Organization</div>
-          </div>
-        </div>
-        <div class="item">
-          <div class="content">
-            <div class="header">{{ teacher.first_name }} {{ teacher.last_name }}</div>
-            <div class="meta">Group Leader</div>
-          </div>
-        </div>
-        <div class="item" v-for="show in selected_shows" :key="show.id">
-          <div class="image">
-            <img :src="show.cover">
-          </div>
-          <div class="content">
-            <div class="header">{{ show.name }}</div>
-            <div class="meta">
-              <div class="ui black label">{{ show.type }}</div>
-              <div class="ui black label">{{ show.duration }} minutes</div>
-            </div>
-            <div class="meta">
-              <div class="ui basic blue label">
-                {{ attendance.students }} students
-              </div>
-              <div class="ui basic blue label">
-                {{ attendance.teachers }} teachers
-              </div>
-              <div class="ui basic large blue label" v-if="attendance.parents > 0">
-                {{ attendance.parents }} parents
+      <h4 class="ui horizontal divider header">
+        Organization & Teacher
+      </h4>
+      <div class="ui two column grid">
+        <div class="column">
+          <div class="ui items">
+            <div class="item" v-if="organization">
+              <div class="content">
+                <div class="header">{{ organization.name }} <div class="ui black label">{{ organization.type }}</div></div>
+                <div class="meta">Organization</div>
               </div>
             </div>
-            <div class="description">
-              <p>{{ show.description }}</p>
+            <div class="item" v-else>
+              <div class="content">
+                <div class="header">{{ new_organization.name }}</div>
+                <div class="meta">Organization</div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="item">
-          <div class="image">
-            <img :src="post_show.cover">
+        <div class="column">
+          <div class="ui items">
+            <div class="item">
+              <div class="content">
+                <div class="header">{{ teacher.first_name }} {{ teacher.last_name }}</div>
+                <div class="meta">Group Leader</div>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+      <h4 class="ui horizontal divider header">
+        Shows
+      </h4>
+      <div :class="selected_shows.length == 1 ? 'ui one column grid' : 'ui two column grid'">
+        <div class="column" v-for="show in selected_shows" :key="show.id">
+          <div class="ui items">
+            <div class="item">
+              <div class="image">
+                <img :src="show.cover">
+              </div>
+              <div class="content">
+                <div class="header">{{ show.name }}</div>
+                <div class="meta">
+                  <div class="ui black label">{{ show.type }}</div>
+                  <div class="ui black label">{{ show.duration }} minutes</div>
+                </div>
+                <div class="meta">
+                  <div class="ui basic blue label">
+                    {{ attendance.students }} students
+                  </div>
+                  <div class="ui basic blue label">
+                    {{ attendance.teachers }} teachers
+                  </div>
+                  <div class="ui basic large blue label" v-if="attendance.parents > 0">
+                    {{ attendance.parents }} parents
+                  </div>
+                </div>
+                <div class="description">
+                  <p>{{ show.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4 class="ui horizontal divider header">
+        Post Show
+      </h4>
+      <div class="ui one column grid">
+        <div class="ui large header">
+          <img :src="post_show.cover">
           <div class="content">
-            <div class="header">{{ post_show.name }}</div>
-            <div class="meta">{{ post_show.description }}</div>
+            {{ post_show.name }}
+            <div class="sub header">
+              {{ post_show.description }}
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="ui form">
+      <div class="field">
+        <label>Notes</label>
+        <textarea rows="3" v-model="memo" v-if="special_needs" placeholder="Explain special needs or enter any special requests or comments about your reservation."></textarea>
+        <textarea rows="3" v-model="memo" v-else placeholder="Enter any special requests or comments about your reservation."></textarea>
+      </div>
+    </div>
+    <br><br>
     <div class="ui huge basic primary button" @click="$router.push({ name: 'teacher-info' })">
       <i class="left chevron icon"></i>
       Back
@@ -89,16 +122,60 @@
       organization()     { return this.$store.state.organization },
       new_organization() { return this.$store.state.new_organization },
       teacher()          { return this.$store.state.teacher },
-      post_show()        { return this.$store.state.post_show }
+      post_show()        { return this.$store.state.post_show },
+      special_needs()    { return this.$store.state.special_needs },
+      times()            { return this.$store.state.times },
+      memo: {
+        set(value) { this.$store.commit('SET_MEMO', value) },
+        get() { return this.$store.state.memo },
+      },
     },
     methods: {
       format,
-      handleSubmit() {
+      async handleSubmit() {
+        const shows = this.times.map((event, i) => ({
+          date: event,
+          show: this.selected_shows[i].id,
+        }))
         // submit data
+        const request = {
+          // School Info
+          schoolId : this.organization.id,
+          school   : this.new_organization.name,
+          address  : this.new_organization.address,
+          city     : this.new_organization.city,
+          state    : this.new_organization.state,
+          zip      : this.new_organization.zip,
+          phone    : this.new_organization.phone,
+          // Teacher Info
+          firstname: this.teacher.firstname,
+          lastname : this.teacher.lastname,
+          email    : this.teacher.email,
+          cell     : this.teacher.phone,
+          // Event Info
 
+          // Attendance
+          students : Number(this.attendance.students),
+          teachers : Number(this.attendance.teachers),
+          parents  : Number(this.attendance.parents),
+          // Shows:
+          shows,
+          // Post Show
+          postShow: this.post_show.name,
+          // Memo
+          memo : this.memo,
+          // Taxable
+          taxable       : !this.$store.state.taxable,
+          special_needs : this.special_needs,
+        }
+        console.log(request)
         // go to thank you page
         this.$router.push({ name: 'thank-you' })
       }
     },
   }
 </script>
+
+<style scoped>
+  textarea { font-family: inherit !important }
+</style>

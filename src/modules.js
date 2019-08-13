@@ -27,13 +27,14 @@ export default {
       phone        : '',
     },
     teacher: {
-      first_name: '',
-      last_name : '',
-      email     : '',
-      phone     : '',
+      first_name : '',
+      last_name  : '',
+      email      : '',
+      phone      : '',
     },
-    special_needs: false,
-    tax_exempt   : false,
+    special_needs : false,
+    taxable       : true,
+    memo : null,
   },
   mutations: {
     SET_ERRORS(state, payload) {
@@ -89,6 +90,15 @@ export default {
     },
     SET_SHOW_DATA(state, payload) {
       state.show_data.splice(0, payload.index, payload.show)
+    },
+    SET_SPECIAL_NEEDS(state, payload) {
+      Object.assign(state, { special_needs: payload })
+    },
+    SET_TAXABLE(state, payload) {
+      Object.assign(state, { taxable: payload })
+    },
+    SET_MEMO(state, payload) {
+      Object.assign(state, { memo: payload })
     }
   },
   actions: {

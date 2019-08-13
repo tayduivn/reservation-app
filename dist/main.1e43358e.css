@@ -792,4 +792,5 @@ span.flatpickr-weekday {
   }
 }
 .flatpickr-input { display : none !important }
-.content { text-align: left !important }
+.content { text-align: left !important }textarea[data-v-fb9bd0] { font-family: inherit !important
+}

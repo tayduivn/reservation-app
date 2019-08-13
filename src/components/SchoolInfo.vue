@@ -1,5 +1,5 @@
 <template>
-  <div class="ui basic center aligned segment">
+  <div class="ui basic segment">
     <div class="ui center aligned huge header">
       <div class="content" style="text-align:center !important">
         School Info
@@ -44,18 +44,29 @@
       </div>
     </div>
     <br><br>
-    <div class="ui huge basic primary button" @click="$router.push({ name: 'post-show' })">
-      <i class="left chevron icon"></i>
-      Back
+    <div class="ui form">
+      <div class="field">
+        <sui-checkbox v-model="special_needs" label="My group has special needs" />
+      </div>
+      <div class="field">
+        <sui-checkbox v-model="taxable" label="My organization is tax exempt" />
+      </div>
     </div>
-    <div class="ui huge basic black button" @click="$router.push({ name: 'home' })">
-      <i class="refresh icon"></i>
-      Start Over
+    <br><br>
+    <div style="text-align: center">
+      <div class="ui huge basic primary button" @click="$router.push({ name: 'post-show' })">
+        <i class="left chevron icon"></i>
+        Back
+      </div>
+      <div class="ui huge basic black button" @click="$router.push({ name: 'home' })">
+        <i class="refresh icon"></i>
+        Start Over
+      </div>
+      <sui-button primary size="huge" :disabled="!isValid" @click="$router.push({ name: 'teacher-info' })">
+        Next
+        <i class="right chevron icon"></i>
+      </sui-button>
     </div>
-    <sui-button primary size="huge" :disabled="!isValid" @click="$router.push({ name: 'teacher-info' })">
-      Next
-      <i class="right chevron icon"></i>
-    </sui-button>
   </div>
 </template>
 
@@ -79,6 +90,14 @@
       new_organization: {
         set(value) { this.$store.commit('SET_NEW_ORGANIZATION', value) },
         get() { return this.$store.state.new_organization }
+      },
+      special_needs: {
+        set(value) { this.$store.commit('SET_SPECIAL_NEEDS', value) },
+        get() { return this.$store.state.special_needs },
+      },
+      taxable: {
+        set(value) { this.$store.commit('SET_TAXABLE', value) },
+        get() { return this.$store.state.taxable },
       },
       isValid() {
         return this.organization != 0 || 

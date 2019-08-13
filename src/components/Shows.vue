@@ -3,7 +3,7 @@
     <div class="ui huge center aligned header">
       <div class="content">Shows</div>
     </div>
-    <div class="ui one column grid">
+    <div :class="times.length == 1 ? 'ui one column grid' : 'ui two column grid' ">
       <div class="column" v-for="(time, i) in times" :key="i">
         <div class="ui dividing header">
           {{ format(new Date(time), "EEEE, MMMM d, yyyy 'at' hh:mm a") }}
