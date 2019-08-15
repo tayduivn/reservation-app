@@ -114,7 +114,10 @@
 </template>
 
 <script>
-  import format from 'date-fns/format'
+  
+  import { format, parseISO } from 'date-fns'
+  import axios from  'axios'
+  
   export default {
     computed: {
       selected_shows()   { return this.$store.state.selected_shows },
@@ -133,12 +136,12 @@
     methods: {
       format,
       async handleSubmit() {
-        const shows = this.times.map((event, i) => ({
-          date: event,
-          show: this.selected_shows[i].id,
+        const events = this.times.map((date, i) => ({
+          date,
+          show_id: this.selected_shows[i].id,
         }))
         // submit data
-        const request = {
+        const data = {
           // School Info
           schoolId : this.organization.id,
           school   : this.new_organization.name,
@@ -148,8 +151,8 @@
           zip      : this.new_organization.zip,
           phone    : this.new_organization.phone,
           // Teacher Info
-          firstname: this.teacher.firstname,
-          lastname : this.teacher.lastname,
+          firstname: this.teacher.first_name,
+          lastname : this.teacher.last_name,
           email    : this.teacher.email,
           cell     : this.teacher.phone,
           // Event Info
@@ -159,7 +162,7 @@
           teachers : Number(this.attendance.teachers),
           parents  : Number(this.attendance.parents),
           // Shows:
-          shows,
+          events,
           // Post Show
           postShow: this.post_show.name,
           // Memo
@@ -168,9 +171,17 @@
           taxable       : !this.$store.state.taxable,
           special_needs : this.special_needs,
         }
-        console.log(request)
-        // go to thank you page
-        this.$router.push({ name: 'thank-you' })
+
+        try {
+          const response = await axios.post(`${SERVER}/api/public/createReservation`, data)
+          // go to thank you page
+          this.$router.push({ name: 'thank-you' })
+        } catch (error) {
+          this.$store.commit('SET_ERRORS', 'Unable to send your reservation at this moment.')
+        }
+
+        console.log(data.events)
+        
       }
     },
   }

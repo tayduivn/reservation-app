@@ -50997,7 +50997,7 @@ var _default = {
 
             };
 
-            if (new Date(scheduledEvent.start).toISOString() === new Date(mockEvent.start).toISOString()) {
+            if (new Date(scheduledEvent.start).toJSON() === new Date(mockEvent.start).toJSON()) {
               isTaken = true;
               filteredSchedule.push(scheduledEvent);
             } else if ((0, _dateFns.areIntervalsOverlapping)(scheduledEventInterval, mockEventInterval)) {
@@ -51027,13 +51027,14 @@ var _default = {
   },
   methods: {
     format: _dateFns.format,
+    parseISO: _dateFns.parseISO,
 
     async queryEvents() {
       this.isLoadingEvents = true;
 
       try {
         const seats = this.$store.getters.seats;
-        const date = new Date(this.date).toISOString().slice(0, 10);
+        const date = new Date(this.date).toJSON().slice(0, 10);
         const response = await _axios.default.get(`${SERVER}/api/public/findAvailableEvents?date=${date}&seats=${seats}`);
         Object.assign(this, {
           events: response.data.data
@@ -51147,7 +51148,12 @@ exports.default = _default;
                           [
                             event.title == "Available"
                               ? _c("sui-checkbox", {
-                                  attrs: { value: event.start.toISOString() },
+                                  attrs: {
+                                    value: _vm.format(
+                                      event.start,
+                                      "yyyy-MM-dd'T'HH:mm:ss"
+                                    )
+                                  },
                                   model: {
                                     value: _vm.times,
                                     callback: function($$v) {
@@ -52814,7 +52820,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _format = _interopRequireDefault(require("date-fns/format"));
+var _dateFns = require("date-fns");
+
+var _axios = _interopRequireDefault(require("axios"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -52979,15 +52987,15 @@ var _default = {
     }
   },
   methods: {
-    format: _format.default,
+    format: _dateFns.format,
 
     async handleSubmit() {
-      const shows = this.times.map((event, i) => ({
-        date: event,
-        show: this.selected_shows[i].id
+      const events = this.times.map((date, i) => ({
+        date,
+        show_id: this.selected_shows[i].id
       })); // submit data
 
-      const request = {
+      const data = {
         // School Info
         schoolId: this.organization.id,
         school: this.new_organization.name,
@@ -52997,8 +53005,8 @@ var _default = {
         zip: this.new_organization.zip,
         phone: this.new_organization.phone,
         // Teacher Info
-        firstname: this.teacher.firstname,
-        lastname: this.teacher.lastname,
+        firstname: this.teacher.first_name,
+        lastname: this.teacher.last_name,
         email: this.teacher.email,
         cell: this.teacher.phone,
         // Event Info
@@ -53007,7 +53015,7 @@ var _default = {
         teachers: Number(this.attendance.teachers),
         parents: Number(this.attendance.parents),
         // Shows:
-        shows,
+        events,
         // Post Show
         postShow: this.post_show.name,
         // Memo
@@ -53016,11 +53024,18 @@ var _default = {
         taxable: !this.$store.state.taxable,
         special_needs: this.special_needs
       };
-      console.log(request); // go to thank you page
 
-      this.$router.push({
-        name: 'thank-you'
-      });
+      try {
+        const response = await _axios.default.post(`${SERVER}/api/public/createReservation`, data); // go to thank you page
+
+        this.$router.push({
+          name: 'thank-you'
+        });
+      } catch (error) {
+        this.$store.commit('SET_ERRORS', 'Unable to send your reservation at this moment.');
+      }
+
+      console.log(data.events);
     }
 
   }
@@ -53364,7 +53379,7 @@ render._withStripped = true
       
       }
     })();
-},{"date-fns/format":"node_modules/date-fns/esm/format/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/ThankYou.vue":[function(require,module,exports) {
+},{"date-fns":"node_modules/date-fns/esm/index.js","axios":"node_modules/axios/index.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/ThankYou.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54948,7 +54963,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36391" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46575" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -52,13 +52,13 @@
 
         <!-- Show events -->
         <div class="ui inverted segment" :key="event.id"
-              :class="event.title == 'Available' ? 'blue' : 'red'"
               v-for="event in filteredEvents"
+              :class="event.title == 'Available' ? 'blue' : 'red'"
               v-else>
           <div class="ui small inverted header">
             <i class="calendar alternate icon"></i>
             <div class="content">
-              <sui-checkbox v-if="event.title == 'Available'" :value="event.start.toISOString()" v-model="times"></sui-checkbox>
+              <sui-checkbox v-if="event.title == 'Available'" :value="format(event.start, `yyyy-MM-dd'T'HH:mm:ss`)" v-model="times"></sui-checkbox>
               {{ event.title }}
               <div class="sub header">
                 {{ format(new Date(event.start), 'hh:mm a') }} - {{ format(new Date(event.end), 'hh:mm a') }}
@@ -87,7 +87,7 @@
 <script>
   
   import axios from 'axios'
-  import { format, startOfDay, endOfDay, addHours, areIntervalsOverlapping } from 'date-fns'
+  import { format, startOfDay, endOfDay, addHours, areIntervalsOverlapping, parseISO } from 'date-fns'
   import flatpickr from 'vue-flatpickr-component'
   import 'flatpickr/dist/flatpickr.css'
 
@@ -162,7 +162,7 @@
               const scheduledEventInterval = { start: new Date(scheduledEvent.start), end: new Date(scheduledEvent.end) }
               const mockEventInterval = { start: new Date(mockEvent.start), end: new Date(mockEvent.end) }
               // If events have the same starting date they will be marked as taken
-              if (new Date(scheduledEvent.start).toISOString() === new Date(mockEvent.start).toISOString()) {
+              if (new Date(scheduledEvent.start).toJSON() === new Date(mockEvent.start).toJSON()) {
                 isTaken = true
                 filteredSchedule.push(scheduledEvent)
               }
@@ -192,11 +192,12 @@
     },
     methods: {
       format,
+      parseISO,
       async queryEvents() {
         this.isLoadingEvents = true
         try {
           const seats = this.$store.getters.seats
-          const date  = new Date(this.date).toISOString().slice(0, 10)
+          const date  = new Date(this.date).toJSON().slice(0, 10)
           const response = await axios.get(`${SERVER}/api/public/findAvailableEvents?date=${date}&seats=${seats}`)
           Object.assign(this, { events: response.data.data })
           this.fetchFailed     = false
