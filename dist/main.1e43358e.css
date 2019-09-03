@@ -1,5 +1,7 @@
 .ui.fluid.container[data-v-cc123d] { height : 100% !important
 }
+.ui.black.tiny.image.label[data-v-cc123d] { position: fixed; bottom: 1rem
+}
 .twelve.wide.column[data-v-cc123d] { z-index : 0 !important; display: flex !important; align-items: center !important; width: 80% !important
 }
 .four.wide.column[data-v-cc123d]   { z-index : 1 !important; width: 20% !important;
@@ -7,7 +9,15 @@
 .ui.basic.center.aligned.segment[data-v-cc123d] { width: 100% !important
 }
 .vue-notification[data-v-cc123d] { margin: 0 !important
-}.flatpickr-calendar {
+}body { 
+  background: linear-gradient(
+                rgba(255, 255, 255, 0.9),
+                rgba(255, 255, 255, 0.9),
+                rgba(255, 255, 255, 0.9)
+                ),
+                url('http://www.starsatnight.org//sciencetheater/includes/themes/MaybornSemanticVue/images/cover_full.jpg') !important;
+  background-size: cover !important;
+}.ui.segment { background-color: transparent !important }.flatpickr-calendar {
   background: transparent;
   opacity: 0;
   display: none;

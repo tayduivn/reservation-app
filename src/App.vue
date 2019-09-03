@@ -45,7 +45,16 @@
           <router-view />
         </transition>
       </div>
+      <div class="sixteen wide column" id="info">
+        <div class="ui basic right aligned segment">
+          <a href="https://astral.anderfernandes.com" target="_blank" class="ui black tiny image label">
+            <img src="https://astral.anderfernandes.com/assets/astral-logo-light.png" alt="">
+            Powered by Astral
+          </a>
+        </div>
+      </div>
     </div>
+    
   </div>
 </template>
 
@@ -139,6 +148,8 @@
 
 <style scoped>
   .ui.fluid.container { height : 100% !important }
+
+  .ui.black.tiny.image.label { position: fixed; bottom: 1rem }
   
   .twelve.wide.column { z-index : 0 !important; display: flex !important; align-items: center !important; width: 80% !important }
   

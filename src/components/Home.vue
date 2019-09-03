@@ -1,5 +1,6 @@
 <template>
   <div class="ui basic center aligned segment">
+    <img class="ui small image centered" src="http://www.starsatnight.org/sciencetheater/includes/themes/MaybornSemanticVue/images/logo.png" />
     <h1 class="ui huge header">
       Welcome to our universe!
       <br><br>
@@ -23,3 +24,15 @@
     
   }
 </script>
+
+<style>
+  body { 
+    background: linear-gradient(
+                  rgba(255, 255, 255, 0.9),
+                  rgba(255, 255, 255, 0.9),
+                  rgba(255, 255, 255, 0.9)
+                  ),
+                  url('http://www.starsatnight.org//sciencetheater/includes/themes/MaybornSemanticVue/images/cover_full.jpg') !important;
+    background-size: cover !important;
+  }
+</style>

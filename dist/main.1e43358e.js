@@ -8551,7 +8551,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 /*!
-  * vue-router v3.1.1
+  * vue-router v3.1.3
   * (c) 2019 Evan You
   * @license MIT
   */
@@ -8812,7 +8812,7 @@ function stringifyQuery(obj) {
 var trailingSlashRE = /\/?$/;
 
 function createRoute(record, location, redirectedFrom, router) {
-  var stringifyQuery$$1 = router && router.options.stringifyQuery;
+  var stringifyQuery = router && router.options.stringifyQuery;
   var query = location.query || {};
 
   try {
@@ -8826,12 +8826,12 @@ function createRoute(record, location, redirectedFrom, router) {
     hash: location.hash || '',
     query: query,
     params: location.params || {},
-    fullPath: getFullPath(location, stringifyQuery$$1),
+    fullPath: getFullPath(location, stringifyQuery),
     matched: record ? formatMatch(record) : []
   };
 
   if (redirectedFrom) {
-    route.redirectedFrom = getFullPath(redirectedFrom, stringifyQuery$$1);
+    route.redirectedFrom = getFullPath(redirectedFrom, stringifyQuery);
   }
 
   return Object.freeze(route);
@@ -9584,9 +9584,9 @@ var Link = {
     var handler = function (e) {
       if (guardEvent(e)) {
         if (this$1.replace) {
-          router.replace(location, null, noop);
+          router.replace(location, noop);
         } else {
-          router.push(location, null, noop);
+          router.push(location, noop);
         }
       }
     };
@@ -9639,7 +9639,26 @@ var Link = {
         // in case the <a> is a static node
         a.isStatic = false;
         var aData = a.data = extend({}, a.data);
-        aData.on = on;
+        aData.on = aData.on || {}; // transform existing events in both objects into arrays so we can push later
+
+        for (var event in aData.on) {
+          var handler$1 = aData.on[event];
+
+          if (event in on) {
+            aData.on[event] = Array.isArray(handler$1) ? handler$1 : [handler$1];
+          }
+        } // append new listeners for router-link
+
+
+        for (var event$1 in on) {
+          if (event$1 in aData.on) {
+            // on[event] is always a function
+            aData.on[event$1].push(on[event$1]);
+          } else {
+            aData.on[event$1] = handler;
+          }
+        }
+
         var aAttrs = a.data.attrs = extend({}, a.data.attrs);
         aAttrs.href = href;
       } else {
@@ -9782,6 +9801,21 @@ function createRouteMap(routes, oldPathList, oldPathMap, oldNameMap) {
       pathList.push(pathList.splice(i, 1)[0]);
       l--;
       i--;
+    }
+  }
+
+  if ("development" === 'development') {
+    // warn if routes do not include leading slashes
+    var found = pathList // check for missing leading slash
+    .filter(function (path) {
+      return path && path.charAt(0) !== '*' && path.charAt(0) !== '/';
+    });
+
+    if (found.length > 0) {
+      var pathNames = found.map(function (path) {
+        return "- " + path;
+      }).join('\n');
+      warn(false, "Non-nested routes must include a leading slash character. Fix the following routes: \n" + pathNames);
     }
   }
 
@@ -10098,6 +10132,25 @@ function resolveRecordPath(path, record) {
   return resolvePath(path, record.parent ? record.parent.path : '/', true);
 }
 /*  */
+// use User Timing api (if present) for more accurate key precision
+
+
+var Time = inBrowser && window.performance && window.performance.now ? window.performance : Date;
+
+function genStateKey() {
+  return Time.now().toFixed(3);
+}
+
+var _key = genStateKey();
+
+function getStateKey() {
+  return _key;
+}
+
+function setStateKey(key) {
+  return _key = key;
+}
+/*  */
 
 
 var positionStore = Object.create(null);
@@ -10249,24 +10302,7 @@ var supportsPushState = inBrowser && function () {
   }
 
   return window.history && 'pushState' in window.history;
-}(); // use User Timing api (if present) for more accurate key precision
-
-
-var Time = inBrowser && window.performance && window.performance.now ? window.performance : Date;
-
-var _key = genKey();
-
-function genKey() {
-  return Time.now().toFixed(3);
-}
-
-function getStateKey() {
-  return _key;
-}
-
-function setStateKey(key) {
-  _key = key;
-}
+}();
 
 function pushState(url, replace) {
   saveScrollPosition(); // try...catch the pushState call to get around Safari
@@ -10277,12 +10313,11 @@ function pushState(url, replace) {
   try {
     if (replace) {
       history.replaceState({
-        key: _key
+        key: getStateKey()
       }, '', url);
     } else {
-      _key = genKey();
       history.pushState({
-        key: _key
+        key: setStateKey(genStateKey())
       }, '', url);
     }
   } catch (e) {
@@ -10424,9 +10459,19 @@ function once(fn) {
 var NavigationDuplicated =
 /*@__PURE__*/
 function (Error) {
-  function NavigationDuplicated() {
-    Error.call(this, 'Navigating to current location is not allowed');
-    this.name = this._name = 'NavigationDuplicated';
+  function NavigationDuplicated(normalizedLocation) {
+    Error.call(this);
+    this.name = this._name = 'NavigationDuplicated'; // passing the message to super() doesn't seem to work in the transpiled version
+
+    this.message = "Navigating to current location (\"" + normalizedLocation.fullPath + "\") is not allowed"; // add a stack property so services like Sentry can correctly display it
+
+    Object.defineProperty(this, 'stack', {
+      value: new Error().stack,
+      writable: true,
+      configurable: true
+    }); // we could also have used
+    // Error.captureStackTrace(this, this.constructor)
+    // but it only exists on node and chrome
   }
 
   if (Error) NavigationDuplicated.__proto__ = Error;
@@ -10729,10 +10774,10 @@ instances, key, isValid) {
 
 var HTML5History =
 /*@__PURE__*/
-function (History$$1) {
+function (History) {
   function HTML5History(router, base) {
     var this$1 = this;
-    History$$1.call(this, router, base);
+    History.call(this, router, base);
     var expectScroll = router.options.scrollBehavior;
     var supportsScroll = supportsPushState && expectScroll;
 
@@ -10759,8 +10804,8 @@ function (History$$1) {
     });
   }
 
-  if (History$$1) HTML5History.__proto__ = History$$1;
-  HTML5History.prototype = Object.create(History$$1 && History$$1.prototype);
+  if (History) HTML5History.__proto__ = History;
+  HTML5History.prototype = Object.create(History && History.prototype);
   HTML5History.prototype.constructor = HTML5History;
 
   HTML5History.prototype.go = function go(n) {
@@ -10817,9 +10862,9 @@ function getLocation(base) {
 
 var HashHistory =
 /*@__PURE__*/
-function (History$$1) {
+function (History) {
   function HashHistory(router, base, fallback) {
-    History$$1.call(this, router, base); // check history fallback deeplinking
+    History.call(this, router, base); // check history fallback deeplinking
 
     if (fallback && checkFallback(this.base)) {
       return;
@@ -10828,8 +10873,8 @@ function (History$$1) {
     ensureSlash();
   }
 
-  if (History$$1) HashHistory.__proto__ = History$$1;
-  HashHistory.prototype = Object.create(History$$1 && History$$1.prototype);
+  if (History) HashHistory.__proto__ = History;
+  HashHistory.prototype = Object.create(History && History.prototype);
   HashHistory.prototype.constructor = HashHistory; // this is delayed until the app mounts
   // to avoid the hashchange listener being fired too early
 
@@ -10958,12 +11003,9 @@ function getHash() {
 
 function getUrl(path) {
   var href = window.location.href;
-  var hashPos = href.indexOf('#');
-  var base = hashPos > -1 ? href.slice(0, hashPos) : href;
-  var searchPos = base.indexOf('?');
-  var query = searchPos > -1 ? base.slice(searchPos) : '';
-  base = query ? base.slice(0, searchPos) : base;
-  return base + "#" + (path + query);
+  var i = href.indexOf('#');
+  var base = i >= 0 ? href.slice(0, i) : href;
+  return base + "#" + path;
 }
 
 function pushHash(path) {
@@ -10986,15 +11028,15 @@ function replaceHash(path) {
 
 var AbstractHistory =
 /*@__PURE__*/
-function (History$$1) {
+function (History) {
   function AbstractHistory(router, base) {
-    History$$1.call(this, router, base);
+    History.call(this, router, base);
     this.stack = [];
     this.index = -1;
   }
 
-  if (History$$1) AbstractHistory.__proto__ = History$$1;
-  AbstractHistory.prototype = Object.create(History$$1 && History$$1.prototype);
+  if (History) AbstractHistory.__proto__ = History;
+  AbstractHistory.prototype = Object.create(History && History.prototype);
   AbstractHistory.prototype.constructor = AbstractHistory;
 
   AbstractHistory.prototype.push = function push(location, onComplete, onAbort) {
@@ -11265,7 +11307,7 @@ function createHref(base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '3.1.1';
+VueRouter.version = '3.1.3';
 
 if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter);
@@ -32026,6 +32068,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   data: () => ({
     steps: [{
@@ -32272,13 +32323,49 @@ exports.default = _default;
             )
           ],
           1
-        )
+        ),
+        _vm._v(" "),
+        _vm._m(0)
       ])
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "sixteen wide column", attrs: { id: "info" } },
+      [
+        _c("div", { staticClass: "ui basic right aligned segment" }, [
+          _c(
+            "a",
+            {
+              staticClass: "ui black tiny image label",
+              attrs: {
+                href: "https://astral.anderfernandes.com",
+                target: "_blank"
+              }
+            },
+            [
+              _c("img", {
+                attrs: {
+                  src:
+                    "https://astral.anderfernandes.com/assets/astral-logo-light.png",
+                  alt: ""
+                }
+              }),
+              _vm._v("\n          Powered by Astral\n        ")
+            ]
+          )
+        ])
+      ]
+    )
+  }
+]
 render._withStripped = true
 
           return {
@@ -32338,6 +32425,7 @@ exports.default = void 0;
 //
 //
 //
+//
 var _default = {};
 exports.default = _default;
         var $8525b5 = exports.default || module.exports;
@@ -32353,6 +32441,14 @@ exports.default = _default;
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "ui basic center aligned segment" }, [
+    _c("img", {
+      staticClass: "ui small image centered",
+      attrs: {
+        src:
+          "http://www.starsatnight.org/sciencetheater/includes/themes/MaybornSemanticVue/images/logo.png"
+      }
+    }),
+    _vm._v(" "),
     _vm._m(0),
     _vm._v(" "),
     _c(
@@ -32421,9 +32517,13 @@ render._withStripped = true
         }
 
         
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
       }
     })();
-},{"vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/Attendance.vue":[function(require,module,exports) {
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/components/Attendance.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32843,9 +32943,13 @@ render._withStripped = true
         }
 
         
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
       }
     })();
-},{"/home/anderson/reservation-app/assets/student.svg":[["student.d0208aef.svg","assets/student.svg"],"assets/student.svg"],"/home/anderson/reservation-app/assets/teacher.svg":[["teacher.8ac98fbe.svg","assets/teacher.svg"],"assets/teacher.svg"],"/home/anderson/reservation-app/assets/parent.svg":[["parent.49d6fc2c.svg","assets/parent.svg"],"assets/parent.svg"],"vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
+},{"/home/anderson/reservation-app/assets/student.svg":[["student.d0208aef.svg","assets/student.svg"],"assets/student.svg"],"/home/anderson/reservation-app/assets/teacher.svg":[["teacher.8ac98fbe.svg","assets/teacher.svg"],"assets/teacher.svg"],"/home/anderson/reservation-app/assets/parent.svg":[["parent.49d6fc2c.svg","assets/parent.svg"],"assets/parent.svg"],"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -34643,14 +34747,17 @@ function addBusinessDays(dirtyDate, dirtyAmount) {
   var amount = (0, _index3.default)(dirtyAmount);
   if (isNaN(amount)) return new Date(NaN);
   var hours = date.getHours();
-  var numWeekDays = 0;
+  var sign = amount < 0 ? -1 : 1;
+  date.setDate(date.getDate() + (0, _index3.default)(amount / 5) * 7);
+  amount %= 5; // to get remaining days not part of a full week
+  // only loops over remaining days or if day is a weekend, ensures a business day is returned
 
-  while (numWeekDays < amount) {
-    date.setDate(date.getDate() + 1);
-    date.setHours(hours);
-    if (!(0, _index.default)(date)) numWeekDays++;
+  while (amount || (0, _index.default)(date)) {
+    date.setDate(date.getDate() + sign);
+    if (!(0, _index.default)(date)) amount -= sign;
   }
 
+  date.setHours(hours);
   return date;
 }
 },{"../isWeekend/index.js":"node_modules/date-fns/esm/isWeekend/index.js","../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js","../_lib/toInteger/index.js":"node_modules/date-fns/esm/_lib/toInteger/index.js"}],"node_modules/date-fns/esm/addDays/index.js":[function(require,module,exports) {
@@ -35916,108 +36023,50 @@ function compareDesc(dirtyDateLeft, dirtyDateRight) {
     return diff;
   }
 }
-},{"../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js"}],"node_modules/date-fns/esm/eachDayOfInterval/index.js":[function(require,module,exports) {
+},{"../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js"}],"node_modules/date-fns/esm/isSameDay/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = eachDayOfInterval;
+exports.default = isSameDay;
 
-var _index = _interopRequireDefault(require("../toDate/index.js"));
+var _index = _interopRequireDefault(require("../startOfDay/index.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
- * @name eachDayOfInterval
- * @category Interval Helpers
- * @summary Return the array of dates within the specified time interval.
+ * @name isSameDay
+ * @category Day Helpers
+ * @summary Are the given dates in the same day?
  *
  * @description
- * Return the array of dates within the specified time interval.
+ * Are the given dates in the same day?
  *
  * ### v2.0.0 breaking changes:
  *
  * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
  *
- * - The function was renamed from `eachDay` to `eachDayOfInterval`.
- *   This change was made to mirror the use of the word "interval" in standard ISO 8601:2004 terminology:
- *
- *   ```
- *   2.1.3
- *   time interval
- *   part of the time axis limited by two instants
- *   ```
- *
- *   Also, this function now accepts an object with `start` and `end` properties
- *   instead of two arguments as an interval.
- *   This function now throws `RangeError` if the start of the interval is after its end
- *   or if any date in the interval is `Invalid Date`.
- *
- *   ```javascript
- *   // Before v2.0.0
- *
- *   eachDay(new Date(2014, 0, 10), new Date(2014, 0, 20))
- *
- *   // v2.0.0 onward
- *
- *   eachDayOfInterval(
- *     { start: new Date(2014, 0, 10), end: new Date(2014, 0, 20) }
- *   )
- *   ```
- *
- * @param {Interval} interval - the interval. See [Interval]{@link docs/types/Interval}
- * @param {Object} [options] - an object with options.
- * @param {Number} [options.step=1] - the step to increment by. The value should be more than 1.
- * @returns {Date[]} the array with starts of days from the day of the interval start to the day of the interval end
- * @throws {TypeError} 1 argument required
- * @throws {RangeError} `options.step` must be a number greater than 1
- * @throws {RangeError} The start of an interval cannot be after its end
- * @throws {RangeError} Date in interval cannot be `Invalid Date`
+ * @param {Date|Number} dateLeft - the first date to check
+ * @param {Date|Number} dateRight - the second date to check
+ * @returns {Boolean} the dates are in the same day
+ * @throws {TypeError} 2 arguments required
  *
  * @example
- * // Each day between 6 October 2014 and 10 October 2014:
- * var result = eachDayOfInterval({
- *   start: new Date(2014, 9, 6),
- *   end: new Date(2014, 9, 10)
- * })
- * //=> [
- * //   Mon Oct 06 2014 00:00:00,
- * //   Tue Oct 07 2014 00:00:00,
- * //   Wed Oct 08 2014 00:00:00,
- * //   Thu Oct 09 2014 00:00:00,
- * //   Fri Oct 10 2014 00:00:00
- * // ]
+ * // Are 4 September 06:00:00 and 4 September 18:00:00 in the same day?
+ * var result = isSameDay(new Date(2014, 8, 4, 6, 0), new Date(2014, 8, 4, 18, 0))
+ * //=> true
  */
-function eachDayOfInterval(dirtyInterval, options) {
-  if (arguments.length < 1) {
-    throw new TypeError('1 argument required, but only ' + arguments.length + ' present');
+function isSameDay(dirtyDateLeft, dirtyDateRight) {
+  if (arguments.length < 2) {
+    throw new TypeError('2 arguments required, but only ' + arguments.length + ' present');
   }
 
-  var interval = dirtyInterval || {};
-  var startDate = (0, _index.default)(interval.start);
-  var endDate = (0, _index.default)(interval.end);
-  var endTime = endDate.getTime(); // Throw an exception if start date is after end date or if any date is `Invalid Date`
-
-  if (!(startDate.getTime() <= endTime)) {
-    throw new RangeError('Invalid interval');
-  }
-
-  var dates = [];
-  var currentDate = startDate;
-  currentDate.setHours(0, 0, 0, 0);
-  var step = options && 'step' in options ? Number(options.step) : 1;
-  if (step < 1 || isNaN(step)) throw new RangeError('`options.step` must be a number greater than 1');
-
-  while (currentDate.getTime() <= endTime) {
-    dates.push((0, _index.default)(currentDate));
-    currentDate.setDate(currentDate.getDate() + step);
-    currentDate.setHours(0, 0, 0, 0);
-  }
-
-  return dates;
+  var dateLeftStartOfDay = (0, _index.default)(dirtyDateLeft);
+  var dateRightStartOfDay = (0, _index.default)(dirtyDateRight);
+  return dateLeftStartOfDay.getTime() === dateRightStartOfDay.getTime();
 }
-},{"../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js"}],"node_modules/date-fns/esm/differenceInBusinessDays/index.js":[function(require,module,exports) {
+},{"../startOfDay/index.js":"node_modules/date-fns/esm/startOfDay/index.js"}],"node_modules/date-fns/esm/differenceInBusinessDays/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36025,15 +36074,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = differenceInBusinessDays;
 
-var _index = _interopRequireDefault(require("../compareAsc/index.js"));
+var _index = _interopRequireDefault(require("../isValid/index.js"));
 
-var _index2 = _interopRequireDefault(require("../eachDayOfInterval/index.js"));
+var _index2 = _interopRequireDefault(require("../isWeekend/index.js"));
 
-var _index3 = _interopRequireDefault(require("../isValid/index.js"));
+var _index3 = _interopRequireDefault(require("../toDate/index.js"));
 
-var _index4 = _interopRequireDefault(require("../isWeekend/index.js"));
+var _index4 = _interopRequireDefault(require("../differenceInCalendarDays/index.js"));
 
-var _index5 = _interopRequireDefault(require("../toDate/index.js"));
+var _index5 = _interopRequireDefault(require("../addDays/index.js"));
+
+var _index6 = _interopRequireDefault(require("../isSameDay/index.js"));
+
+var _index7 = _interopRequireDefault(require("../_lib/toInteger/index.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36067,27 +36120,24 @@ function differenceInBusinessDays(dirtyDateLeft, dirtyDateRight) {
     throw new TypeError('2 arguments required, but only ' + arguments.length + ' present');
   }
 
-  var dateLeft = (0, _index5.default)(dirtyDateLeft);
-  var dateRight = (0, _index5.default)(dirtyDateRight);
-  if (!(0, _index3.default)(dateLeft) || !(0, _index3.default)(dateRight)) return new Date(NaN);
-  var sign = (0, _index.default)(dateLeft, dateRight);
-  var interval = sign > 0 ? {
-    start: dateRight,
-    end: dateLeft
-  } : {
-    start: dateLeft,
-    end: dateRight
-  };
-  var daysOfInterval = (0, _index2.default)(interval);
-  var difference = daysOfInterval.filter(function (day) {
-    return !(0, _index4.default)(day);
-  }); // Subtract 1 if interval contains ending date that falls on a weekday
+  var dateLeft = (0, _index3.default)(dirtyDateLeft);
+  var dateRight = (0, _index3.default)(dirtyDateRight);
+  if (!(0, _index.default)(dateLeft) || !(0, _index.default)(dateRight)) return new Date(NaN);
+  var calendarDifference = (0, _index4.default)(dateLeft, dateRight);
+  var sign = calendarDifference < 0 ? -1 : 1;
+  var weeks = (0, _index7.default)(calendarDifference / 7);
+  var result = weeks * 5;
+  dateRight = (0, _index5.default)(dateRight, weeks * 7); // the loop below will run at most 6 times to account for the remaining days that don't makeup a full week
 
-  var result = sign * (difference.length - ((0, _index4.default)(dateLeft) ? 0 : 1)); // Prevent negative zero
+  while (!(0, _index6.default)(dateLeft, dateRight)) {
+    // sign is used to account for both negative and positive differences
+    result += (0, _index2.default)(dateRight) ? 0 : sign;
+    dateRight = (0, _index5.default)(dateRight, sign);
+  }
 
   return result === 0 ? 0 : result;
 }
-},{"../compareAsc/index.js":"node_modules/date-fns/esm/compareAsc/index.js","../eachDayOfInterval/index.js":"node_modules/date-fns/esm/eachDayOfInterval/index.js","../isValid/index.js":"node_modules/date-fns/esm/isValid/index.js","../isWeekend/index.js":"node_modules/date-fns/esm/isWeekend/index.js","../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js"}],"node_modules/date-fns/esm/differenceInCalendarISOWeekYears/index.js":[function(require,module,exports) {
+},{"../isValid/index.js":"node_modules/date-fns/esm/isValid/index.js","../isWeekend/index.js":"node_modules/date-fns/esm/isWeekend/index.js","../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js","../differenceInCalendarDays/index.js":"node_modules/date-fns/esm/differenceInCalendarDays/index.js","../addDays/index.js":"node_modules/date-fns/esm/addDays/index.js","../isSameDay/index.js":"node_modules/date-fns/esm/isSameDay/index.js","../_lib/toInteger/index.js":"node_modules/date-fns/esm/_lib/toInteger/index.js"}],"node_modules/date-fns/esm/differenceInCalendarISOWeekYears/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -37016,7 +37066,108 @@ function differenceInYears(dirtyDateLeft, dirtyDateRight) {
 
   return result === 0 ? 0 : result;
 }
-},{"../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js","../differenceInCalendarYears/index.js":"node_modules/date-fns/esm/differenceInCalendarYears/index.js","../compareAsc/index.js":"node_modules/date-fns/esm/compareAsc/index.js"}],"node_modules/date-fns/esm/eachWeekOfInterval/index.js":[function(require,module,exports) {
+},{"../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js","../differenceInCalendarYears/index.js":"node_modules/date-fns/esm/differenceInCalendarYears/index.js","../compareAsc/index.js":"node_modules/date-fns/esm/compareAsc/index.js"}],"node_modules/date-fns/esm/eachDayOfInterval/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = eachDayOfInterval;
+
+var _index = _interopRequireDefault(require("../toDate/index.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @name eachDayOfInterval
+ * @category Interval Helpers
+ * @summary Return the array of dates within the specified time interval.
+ *
+ * @description
+ * Return the array of dates within the specified time interval.
+ *
+ * ### v2.0.0 breaking changes:
+ *
+ * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
+ *
+ * - The function was renamed from `eachDay` to `eachDayOfInterval`.
+ *   This change was made to mirror the use of the word "interval" in standard ISO 8601:2004 terminology:
+ *
+ *   ```
+ *   2.1.3
+ *   time interval
+ *   part of the time axis limited by two instants
+ *   ```
+ *
+ *   Also, this function now accepts an object with `start` and `end` properties
+ *   instead of two arguments as an interval.
+ *   This function now throws `RangeError` if the start of the interval is after its end
+ *   or if any date in the interval is `Invalid Date`.
+ *
+ *   ```javascript
+ *   // Before v2.0.0
+ *
+ *   eachDay(new Date(2014, 0, 10), new Date(2014, 0, 20))
+ *
+ *   // v2.0.0 onward
+ *
+ *   eachDayOfInterval(
+ *     { start: new Date(2014, 0, 10), end: new Date(2014, 0, 20) }
+ *   )
+ *   ```
+ *
+ * @param {Interval} interval - the interval. See [Interval]{@link docs/types/Interval}
+ * @param {Object} [options] - an object with options.
+ * @param {Number} [options.step=1] - the step to increment by. The value should be more than 1.
+ * @returns {Date[]} the array with starts of days from the day of the interval start to the day of the interval end
+ * @throws {TypeError} 1 argument required
+ * @throws {RangeError} `options.step` must be a number greater than 1
+ * @throws {RangeError} The start of an interval cannot be after its end
+ * @throws {RangeError} Date in interval cannot be `Invalid Date`
+ *
+ * @example
+ * // Each day between 6 October 2014 and 10 October 2014:
+ * var result = eachDayOfInterval({
+ *   start: new Date(2014, 9, 6),
+ *   end: new Date(2014, 9, 10)
+ * })
+ * //=> [
+ * //   Mon Oct 06 2014 00:00:00,
+ * //   Tue Oct 07 2014 00:00:00,
+ * //   Wed Oct 08 2014 00:00:00,
+ * //   Thu Oct 09 2014 00:00:00,
+ * //   Fri Oct 10 2014 00:00:00
+ * // ]
+ */
+function eachDayOfInterval(dirtyInterval, options) {
+  if (arguments.length < 1) {
+    throw new TypeError('1 argument required, but only ' + arguments.length + ' present');
+  }
+
+  var interval = dirtyInterval || {};
+  var startDate = (0, _index.default)(interval.start);
+  var endDate = (0, _index.default)(interval.end);
+  var endTime = endDate.getTime(); // Throw an exception if start date is after end date or if any date is `Invalid Date`
+
+  if (!(startDate.getTime() <= endTime)) {
+    throw new RangeError('Invalid interval');
+  }
+
+  var dates = [];
+  var currentDate = startDate;
+  currentDate.setHours(0, 0, 0, 0);
+  var step = options && 'step' in options ? Number(options.step) : 1;
+  if (step < 1 || isNaN(step)) throw new RangeError('`options.step` must be a number greater than 1');
+
+  while (currentDate.getTime() <= endTime) {
+    dates.push((0, _index.default)(currentDate));
+    currentDate.setDate(currentDate.getDate() + step);
+    currentDate.setHours(0, 0, 0, 0);
+  }
+
+  return dates;
+}
+},{"../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js"}],"node_modules/date-fns/esm/eachWeekOfInterval/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -39968,11 +40119,29 @@ function getWeekOfMonth(date, dirtyOptions) {
     throw new RangeError('weekStartsOn must be between 0 and 6 inclusively');
   }
 
+  var currentDayOfMonth = (0, _index.default)(date);
+
+  if (isNaN(currentDayOfMonth)) {
+    return currentDayOfMonth;
+  }
+
   var startWeekDay = (0, _index2.default)((0, _index3.default)(date));
-  var currentWeekDay = (0, _index2.default)(date);
-  var startWeekDayWithOptions = startWeekDay < weekStartsOn ? 7 - weekStartsOn : startWeekDay;
-  var diff = startWeekDayWithOptions > currentWeekDay ? 7 - weekStartsOn : 0;
-  return Math.ceil(((0, _index.default)(date) + diff) / 7);
+  var lastDayOfFirstWeek = 0;
+
+  if (startWeekDay >= weekStartsOn) {
+    lastDayOfFirstWeek = weekStartsOn + 7 - startWeekDay;
+  } else {
+    lastDayOfFirstWeek = weekStartsOn - startWeekDay;
+  }
+
+  var weekNumber = 1;
+
+  if (currentDayOfMonth > lastDayOfFirstWeek) {
+    var remainingDaysAfterFirstWeek = currentDayOfMonth - lastDayOfFirstWeek;
+    weekNumber = weekNumber + Math.ceil(remainingDaysAfterFirstWeek / 7);
+  }
+
+  return weekNumber;
 }
 },{"../getDate/index.js":"node_modules/date-fns/esm/getDate/index.js","../getDay/index.js":"node_modules/date-fns/esm/getDay/index.js","../startOfMonth/index.js":"node_modules/date-fns/esm/startOfMonth/index.js","../_lib/toInteger/index.js":"node_modules/date-fns/esm/_lib/toInteger/index.js"}],"node_modules/date-fns/esm/lastDayOfMonth/index.js":[function(require,module,exports) {
 "use strict";
@@ -40551,50 +40720,7 @@ function isPast(dirtyDate) {
 
   return (0, _index.default)(dirtyDate).getTime() < Date.now();
 }
-},{"../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js"}],"node_modules/date-fns/esm/isSameDay/index.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = isSameDay;
-
-var _index = _interopRequireDefault(require("../startOfDay/index.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @name isSameDay
- * @category Day Helpers
- * @summary Are the given dates in the same day?
- *
- * @description
- * Are the given dates in the same day?
- *
- * ### v2.0.0 breaking changes:
- *
- * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
- *
- * @param {Date|Number} dateLeft - the first date to check
- * @param {Date|Number} dateRight - the second date to check
- * @returns {Boolean} the dates are in the same day
- * @throws {TypeError} 2 arguments required
- *
- * @example
- * // Are 4 September 06:00:00 and 4 September 18:00:00 in the same day?
- * var result = isSameDay(new Date(2014, 8, 4, 6, 0), new Date(2014, 8, 4, 18, 0))
- * //=> true
- */
-function isSameDay(dirtyDateLeft, dirtyDateRight) {
-  if (arguments.length < 2) {
-    throw new TypeError('2 arguments required, but only ' + arguments.length + ' present');
-  }
-
-  var dateLeftStartOfDay = (0, _index.default)(dirtyDateLeft);
-  var dateRightStartOfDay = (0, _index.default)(dirtyDateRight);
-  return dateLeftStartOfDay.getTime() === dateRightStartOfDay.getTime();
-}
-},{"../startOfDay/index.js":"node_modules/date-fns/esm/startOfDay/index.js"}],"node_modules/date-fns/esm/startOfHour/index.js":[function(require,module,exports) {
+},{"../toDate/index.js":"node_modules/date-fns/esm/toDate/index.js"}],"node_modules/date-fns/esm/startOfHour/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -42343,7 +42469,6 @@ var unescapedLatinCharacterRegExp = /[a-zA-Z]/;
  *
  * Format of the string is based on Unicode Technical Standard #35:
  * https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
- * with a few additions (see note 7 below the table).
  *
  * Accepted patterns:
  * | Unit                            | Pattern | Result examples                   |
@@ -50741,9 +50866,10 @@ var define;
           return this.config.wrap ? this.$el.parentNode : this.$el;
         },
         onInput: function (t) {
-          var e = this;
+          var e = this,
+              n = t.target.value;
           this.$nextTick(function () {
-            e.$emit("input", t.target.value);
+            e.$emit("input", n);
           });
         },
         fpInput: function () {
@@ -53168,17 +53294,13 @@ exports.default = _default;
                       ]),
                       _vm._v(" "),
                       _vm.attendance.parents > 0
-                        ? _c(
-                            "div",
-                            { staticClass: "ui basic large blue label" },
-                            [
-                              _vm._v(
-                                "\n                  " +
-                                  _vm._s(_vm.attendance.parents) +
-                                  " parents\n                "
-                              )
-                            ]
-                          )
+                        ? _c("div", { staticClass: "ui basic blue label" }, [
+                            _vm._v(
+                              "\n                  " +
+                                _vm._s(_vm.attendance.parents) +
+                                " parents\n                "
+                            )
+                          ])
                         : _vm._e()
                     ]),
                     _vm._v(" "),
@@ -54963,7 +55085,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46575" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36087" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

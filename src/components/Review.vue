@@ -63,7 +63,7 @@
                   <div class="ui basic blue label">
                     {{ attendance.teachers }} teachers
                   </div>
-                  <div class="ui basic large blue label" v-if="attendance.parents > 0">
+                  <div class="ui basic blue label" v-if="attendance.parents > 0">
                     {{ attendance.parents }} parents
                   </div>
                 </div>

@@ -124,3 +124,6 @@
   }
 </script>
 
+<style>
+  .ui.segment { background-color: transparent !important }
+</style>
