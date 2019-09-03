@@ -17,8 +17,12 @@ Vue.use(VueTheMask)
 const router = new VueRouter(routes)
 const store  = new Vuex.Store(modules)
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+try {
+  new Vue({
+    router,
+    store,
+    render: h => h(App)
+  }).$mount('#app')
+} catch (error) {
+  console.log(error)
+}
