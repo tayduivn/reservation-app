@@ -9,7 +9,7 @@ import Review      from './components/Review.vue'
 import ThankYou    from './components/ThankYou.vue'
 
 export default {
-  mode : 'history',
+  //mode : 'history',
   routes : [
     {
       path      : '/',

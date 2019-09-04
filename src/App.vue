@@ -20,7 +20,7 @@
       <div class="ui basic large blue label" v-if="attendance.parents > 0">
         {{ attendance.parents }} parents
       </div>
-      <div class="ui basic large blue label" v-for="(time, i) in times" :key="i">
+      <div class="ui basic large blue label" v-for="time in times" :key="time">
         <div class="detail" style="margin-left:0">#{{ i + 1 }}</div>
         {{ format(new Date(time), "EEEE, MMMM d, yyyy 'at' hh:mm a") }}
         <div class="detail" v-if="selected_shows[i]">{{ selected_shows[i].name }}</div>
