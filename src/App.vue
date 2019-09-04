@@ -1,5 +1,5 @@
 <template>
-  <div class="ui fluid container">
+  <div class="ui fluid container" id="master">
     <sui-step-group fluid>
       <sui-step v-for="(step, i) in steps"
                 :key="i" :icon="step.icon" 
@@ -9,8 +9,15 @@
                 :completed="$route.meta.step > (i + 1)"
                 :disabled="$route.meta.step < (i + 1)" />
     </sui-step-group>
+
+    <div class="ui basic right aligned segment">
+      <a href="https://astral.anderfernandes.com" target="_blank" class="ui black tiny image label">
+        <img src="https://astral.anderfernandes.com/assets/astral-logo-light.png" alt="">
+        Powered by Astral
+      </a>
+    </div>
     
-    <div v-show="$route.name != 'home' && $route.name != 'review' && $route.name != 'thank-you' ">
+    <div class="ui basic center aligned segment" v-show="$route.name != 'home' && $route.name != 'review' && $route.name != 'thank-you' ">
       <div class="ui basic large blue label">
         {{ attendance.students }} students
       </div>
@@ -20,7 +27,7 @@
       <div class="ui basic large blue label" v-if="attendance.parents > 0">
         {{ attendance.parents }} parents
       </div>
-      <div class="ui basic large blue label" v-for="time in times" :key="time">
+      <div class="ui basic large blue label" v-for="(time, i) in times" :key="i">
         <div class="detail" style="margin-left:0">#{{ i + 1 }}</div>
         {{ format(new Date(time), "EEEE, MMMM d, yyyy 'at' hh:mm a") }}
         <div class="detail" v-if="selected_shows[i]">{{ selected_shows[i].name }}</div>
@@ -29,7 +36,7 @@
     </div>
 
     <div class="ui grid container">
-      <div class="sixteen wide column">
+      <div class="sixteen wide column" id="inner">
         <notifications :close-on-click="false" width="400">
           <template slot="body" slot-scope="props">
             <div class="ui blue icon message">
@@ -44,14 +51,6 @@
         <transition :name="transition" mode="out-in">
           <router-view />
         </transition>
-      </div>
-      <div class="sixteen wide column" id="info">
-        <div class="ui basic right aligned segment">
-          <a href="https://astral.anderfernandes.com" target="_blank" class="ui black tiny image label">
-            <img src="https://astral.anderfernandes.com/assets/astral-logo-light.png" alt="">
-            Powered by Astral
-          </a>
-        </div>
       </div>
     </div>
     
@@ -147,9 +146,7 @@
 </script>
 
 <style scoped>
-  .ui.fluid.container { height : 100% !important }
-
-  .ui.black.tiny.image.label { position: fixed; bottom: 1rem }
+  #inner, #master { min-height: 100% !important; }
   
   .twelve.wide.column { z-index : 0 !important; display: flex !important; align-items: center !important; width: 80% !important }
   
@@ -158,6 +155,16 @@
   .ui.basic.center.aligned.segment { width: 100% !important }
 
   .vue-notification { margin: 0 !important }
+
+  #master { 
+    background: linear-gradient(
+                  rgba(255, 255, 255, 0.9),
+                  rgba(255, 255, 255, 0.9),
+                  rgba(255, 255, 255, 0.9)
+                  ),
+                  url('http://www.starsatnight.org//sciencetheater/includes/themes/MaybornSemanticVue/images/cover_full.jpg') !important;
+    background-size: cover !important;
+  }
   
 </style>
 
