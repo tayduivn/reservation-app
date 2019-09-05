@@ -6,7 +6,7 @@
     <div :class="times.length == 1 ? 'ui one column grid' : 'ui two column grid' ">
       <div class="column" v-for="(time, i) in times" :key="i">
         <div class="ui dividing header">
-          {{ format(new Date(time), "EEEE, MMMM d, yyyy 'at' hh:mm a") }}
+          {{ format(new Date(time), "EEEE, MMMM d, yyyy '@' hh:mm a") }}
         </div>
         <sui-dropdown fluid :placeholder="`Select Show #${ i + 1 }`" search selection :options="available_shows" @input="handleShowChange" v-model="shows[i]"></sui-dropdown>
         <div class="ui segment">
@@ -21,9 +21,7 @@
                   <div class="ui black label">{{ getShow(shows[i]).type }}</div>
                   <div class="ui black label">{{ getShow(shows[i]).duration }} minutes</div>
                 </div>
-                <div class="description">
-                  <p>{{ getShow(shows[i]).description }}</p>
-                </div>
+                <div class="description" v-html="marked(getShow(shows[i]).description)"></div>
               </div>
             </div>
             <div class="item" v-else>
@@ -59,8 +57,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import axios  from 'axios'
   import format from 'date-fns/format'
+  import marked from 'marked'
   
   export default {
     data: () => ({
@@ -84,6 +83,7 @@
     },
     methods: {
       format,
+      marked,
       handleShowChange(event) {
         const selected_shows = this.shows.map(show => this.getShow(show), this)
         this.$store.commit('SET_SELECTED_SHOWS', selected_shows)

@@ -67,9 +67,7 @@
                     {{ attendance.parents }} parents
                   </div>
                 </div>
-                <div class="description">
-                  <p>{{ show.description }}</p>
-                </div>
+                <div class="description" v-html="marked(show.description)"></div>
               </div>
             </div>
           </div>
@@ -116,7 +114,8 @@
 <script>
   
   import { format, parseISO } from 'date-fns'
-  import axios from  'axios'
+  import axios  from 'axios'
+  import marked from 'marked'
   
   export default {
     computed: {
@@ -135,6 +134,7 @@
     },
     methods: {
       format,
+      marked,
       async handleSubmit() {
         const events = this.times.map((date, i) => ({
           date,
