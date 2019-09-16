@@ -11,7 +11,7 @@ export default {
       parents  : 0,
     },
     date: null,
-    min_date: addDays(new Date(), 14),
+    min_date: addDays(new Date(), 2),
     times: [],
     shows: [],
     show_data: [],

@@ -9,7 +9,7 @@
     <div class="ui three column grid">
       <div class="column">
         <div class="ui segment">
-          <img src="https://cdn.jsdelivr.net/gh/anderfernandes/reservation-app@next/dist/student.d0208aef.svg"
+          <img src="https://cdn.jsdelivr.net/gh/anderfernandes/reservation-app@next/assets/student.svg"
                 class="ui centered small image">
           <div class="ui header">
             How many students?
@@ -24,7 +24,7 @@
       </div>
       <div class="column">
         <div class="ui segment">
-          <img src="https://cdn.jsdelivr.net/gh/anderfernandes/reservation-app@next/dist/teacher.8ac98fbe.svg"
+          <img src="https://cdn.jsdelivr.net/gh/anderfernandes/reservation-app@next/assets/teacher.svg"
                 class="ui centered small image">
           <div class="ui header">
             How many teachers?
@@ -39,7 +39,7 @@
       </div>
       <div class="column">
         <div class="ui segment">
-          <img src="https://cdn.jsdelivr.net/gh/anderfernandes/reservation-app@next/dist/parent.49d6fc2c.svg" alt="" class="ui centered small image">
+          <img src="https://cdn.jsdelivr.net/gh/anderfernandes/reservation-app@next/assets/parent.svg" alt="" class="ui centered small image">
           <div class="ui header">
             How many parents?
             <div class="sub header">
