@@ -1,5 +1,13 @@
 <template>
   <div class="ui basic center aligned segment">
+    <div class="ui info icon message">
+      <i class="info circle icon"></i> 
+      <div class="content">
+        <div class="header">Help us help you!</div> 
+          <p>You can select multiple events at once. If you have different amount of people, 
+            do not go over this reservation app again, just let us know in the last step where you get to write us about your reservation.</p>
+        </div>
+    </div>
     <div class="ui huge center aligned header">
       <div class="content">Date</div>
     </div>
@@ -158,11 +166,14 @@
 
           mockEvents.forEach(mockEvent => {
             let isTaken = false
+            let isOutreach = false
             scheduledEvents.forEach(scheduledEvent => {
               const scheduledEventInterval = { start: new Date(scheduledEvent.start), end: new Date(scheduledEvent.end) }
               const mockEventInterval = { start: new Date(mockEvent.start), end: new Date(mockEvent.end) }
+              console.log(scheduledEvent)
+              // WE NEED TO CHECK IF AN EVENT IS AN OUTREACH
               // If events have the same starting date they will be marked as taken
-              if (new Date(scheduledEvent.start).toJSON() === new Date(mockEvent.start).toJSON()) {
+              if ((new Date(scheduledEvent.start).toJSON() === new Date(mockEvent.start).toJSON())) {
                 isTaken = true
                 filteredSchedule.push(scheduledEvent)
               }
