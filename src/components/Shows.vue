@@ -90,7 +90,9 @@
       },
       async fetchShows() {
         try {
-          const response = await axios.get(`${SERVER}/api/public/shows`)
+          let response = await axios.get(`${SERVER}/api/public/shows`)
+          const NUMBER_OF_SHOWS = response.data.total
+          response = await axios.get(`${SERVER}/api/public/shows?paginate=${NUMBER_OF_SHOWS}`)
           Object.assign(this, { all_shows: response.data.data })
           Object.assign(this, { 
             available_shows: response.data.data.map(show => ({ key: show.id, text: show.name, value: show.id })) 
