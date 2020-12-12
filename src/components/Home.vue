@@ -1,6 +1,6 @@
 <template>
   <div class="ui basic center aligned segment">
-    <img class="ui small image centered" src="http://www.starsatnight.org/sciencetheater/includes/themes/MaybornSemanticVue/images/logo.png" />
+    <img class="ui small image centered" src="http://www.starsatnight.org/sites/sciencetheater/themes/MaybornSemanticVue-master/images/logo.png" />
     <h1 class="ui huge header">
       Welcome to our universe!
       <br><br>
